@@ -9,7 +9,7 @@ public class Character : MonoBehaviour
     [SerializeField] private Rigidbody2D rigid2D = null;
     [HideInInspector] public Vector2 receivedMovementVector = new Vector2(0f, 0f);
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
-    [SerializeField] private float speed = 3f;
+    public float speed = 3f;
 
 
     private void Update() => ManagementMovements();
