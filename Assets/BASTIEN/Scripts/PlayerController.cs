@@ -62,7 +62,6 @@ public class PlayerController : MonoBehaviour
         if (!characterToControl && GetComponent<Character>())
             characterToControl = GetComponent<Character>();
     }
-
     private void OnValidate() => GetMissingComponents();
     #endregion
 }
