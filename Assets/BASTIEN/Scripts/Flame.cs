@@ -26,26 +26,24 @@ public class Flame : MonoBehaviour
     private void Start()
     {
         if (startOnStart)
-            Invoke("RestartMovingFromBeginning", 3f);
+            Invoke("StartMoving", 3f);
     }
-    private void Update()
-    {
-        UpdateMoving();
-    }
+    void StartMoving() => RestartMovingFromBeginning(0);
+    private void Update() => UpdateMoving();
 
-    
-    
-    
+
+
+
 
     #region START & STOP
     public void SetMoving(bool state) => moving = state;
-    void RestartMovingFromBeginning()
+    public void RestartMovingFromBeginning(int index)
     {
         if (lineRendererToFollow && lineRendererToFollow.positionCount > 5)
         {
-            currentSectionIndex = 0;
+            currentSectionIndex = index;
             //transform.position = lineRendererToFollow.GetPosition(0);
-            NewSection(0, 0);
+            NewSection(index, 0);
             SetMoving(true);
         }
         //else
@@ -62,7 +60,19 @@ public class Flame : MonoBehaviour
     void NewSection(int newSectionIndex, float startValue)
     {
         currentPointPos = lineRendererToFollow.GetPosition(currentSectionIndex);
+
+        // Burn the rope
+        Vector3 burnPos = currentPointPos;
+        burnPos.z = 1;
+        lineRendererToFollow.SetPosition(currentSectionIndex, burnPos);
+
+        
+        
         nextpoinsPos = lineRendererToFollow.GetPosition(currentSectionIndex + 1);
+        // If Z pos not 0, means it has burnt already, can't burn anymore
+        if (nextpoinsPos.z > 0)
+            Die();
+        
         currentSectionLength = CalculateCurrentSectionLength();
         currentSectionRanDistance = startValue;
         UpdateGradient();
@@ -138,10 +148,14 @@ public class Flame : MonoBehaviour
 
 
 
+    
+    
 
     void TouchPlayer()
     {
         Debug.Log("BOOM");
         moving = false;
     }
+
+    void Die() => Destroy(gameObject);
 }
