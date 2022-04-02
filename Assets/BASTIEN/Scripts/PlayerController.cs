@@ -23,14 +23,19 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        
+        GetInputValues();
+        SendCharacterMovements();
     }
     
     
     
     
     #region GET INPUT VALUES
-    
+    void GetInputValues()
+    {
+        xValue = Input.GetAxis(horizontal);
+        yValue = Input.GetAxis(vertical);
+    }
     #endregion
     
     
@@ -39,7 +44,11 @@ public class PlayerController : MonoBehaviour
     #region SEND INPUT VALUES TO CHARACTER
     void SendCharacterMovements()
     {
-        
+        if (characterToControl)
+        {
+            Vector2 newValue = new Vector2(xValue, yValue);
+            characterToControl.receivedMovementVector = newValue;
+        }
     }
     #endregion
 
