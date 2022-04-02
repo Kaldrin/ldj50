@@ -8,6 +8,8 @@ public class Flame : MonoBehaviour
     [SerializeField] private LineRenderer lineRendererToFollow = null;
     [SerializeField] private float speed = 0.002f;
     [SerializeField] private bool startOnStart = false;
+    [SerializeField] private float distanceToSpread = 4f;
+    [SerializeField] private GameObject flamePrefab = null;
     private bool moving = false;
     
     
@@ -148,7 +150,24 @@ public class Flame : MonoBehaviour
 
 
 
-    
+
+    #region PROPAGATE
+    void CheckForAdjacentSection()
+    {
+        for (int i = 0; i < lineRendererToFollow.positionCount; i++)
+        {
+            Vector3 position = lineRendererToFollow.GetPosition(i);
+            if (position.z == 0 && Vector3.Distance(position, transform.position) < distanceToSpread);
+                SpreadFire(i);
+        }
+    }
+    void SpreadFire(int index)
+    {
+        Flame newFlame = Instantiate(flamePrefab).GetComponent<Flame>();
+        newFlame.lineRendererToFollow = lineRendererToFollow;
+        newFlame.RestartMovingFromBeginning(index);
+    }
+    #endregion
     
 
     void TouchPlayer()
