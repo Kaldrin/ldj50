@@ -9,6 +9,7 @@ public class Character : MonoBehaviour
     [SerializeField] private Rigidbody2D rigid2D = null;
     [HideInInspector] public Vector2 receivedMovementVector = new Vector2(0f, 0f);
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
+    [SerializeField] private float speed = 3f;
 
 
     private void Update()
@@ -20,10 +21,7 @@ public class Character : MonoBehaviour
     
     #region MOVEMENTS
 
-    void CalculateMovement()
-    {
-        actualMovementVector = Vector3.Normalize(receivedMovementVector);
-    }
+    void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed;
     void ManagementMovements()
     {
         CalculateMovement();

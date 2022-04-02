@@ -9,6 +9,7 @@ public class Meche : MonoBehaviour
     [SerializeField] Transform characterToFollow = null;
     [SerializeField] private LineRenderer lineRenderer = null;
     [SerializeField] private bool startFollowingCharacterOnStart = false;
+    private float distanceToCreateNewPoint = 0.5f;
     private bool followingCharacter = false;
 
     private void Start()
@@ -25,6 +26,7 @@ public class Meche : MonoBehaviour
     }
 
 
+    #region FOLLOW
     void StartFollowingPlayer()
     {
         if (characterToFollow && lineRenderer)
@@ -32,25 +34,40 @@ public class Meche : MonoBehaviour
             followingCharacter = true;
             
             // Set positions of line renderer
-            Vector3[] positions = new Vector3[1] {characterToFollow.transform.position};
+            Vector3[] positions = new Vector3[1] {characterToFollow.position};
             lineRenderer.SetPositions(positions);
         }
             
     }
-
     void ManageFollow()
     {
-        
+        if (CalculateDistanceWithCharacter() >= distanceToCreateNewPoint)
+            AddPoint();
     }
 
-    void Calculate()
+    float CalculateDistanceWithCharacter()
     {
-        
+        float distance = 0f;
+        if (characterToFollow && lineRenderer)
+        {
+            Vector3 lastPointPosition = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
+            Vector3 charaPos = characterToFollow.position;
+            distance = Vector3.Distance(charaPos, lastPointPosition);
+        }
+        return distance;
     }
     void AddPoint()
     {
-        
+        if (characterToFollow && lineRenderer)
+        {
+            Vector3 charaPos = characterToFollow.position;
+            //Vector3[] positions = lineRenderer.GetPositions();
+            //lineRenderer.posi
+        }
     }
+    #endregion
+    
+    
     
     
     
