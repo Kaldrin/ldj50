@@ -76,6 +76,8 @@ public class Meche : MonoBehaviour
         if (characterToFollow && lineRenderer)
         {
             Vector3 charaPos = characterToFollow.position;
+            // Set the Z pos to 0 to indicate it hasn't burnt
+            charaPos = new Vector3(charaPos.x, charaPos.y, 0);
             lineRenderer.positionCount++;
             lineRenderer.SetPosition(lineRenderer.positionCount - 1, charaPos);
         }
