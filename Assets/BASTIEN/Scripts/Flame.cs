@@ -12,7 +12,7 @@ public class Flame : MonoBehaviour
     [SerializeField] private GameObject flamePrefab = null;
     [SerializeField] private int indexNonSpreadRange = 5;
     private bool canPropagate = false;
-    private float propagationCooldown = 3f;
+    [SerializeField] private float propagationCooldown = 2f;
     private float propagationStartTime = 0f;
     
     
@@ -22,6 +22,12 @@ public class Flame : MonoBehaviour
     private float currentSectionRanDistance = 0f;
     private Vector3 currentPointPos = new Vector3(0f, 0f, 0f);
     private Vector3 nextpoinsPos = new Vector3(0f, 0f, 0f);
+
+
+    [Header("FX")]
+    [SerializeField] private List<ParticleSystem> effects = new List<ParticleSystem>();
+
+    
     
     [Header("READ ONLY")]
     [SerializeField] private bool moving = false;
@@ -33,14 +39,20 @@ public class Flame : MonoBehaviour
     
     private void Start()
     {
+        /*
         if (startOnStart)
             Invoke("StartMoving", 3f);
+            */
     }
     public void StartMoving() => RestartMovingFromBeginning(0);
     private void Update() => UpdateMoving();
 
 
-
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+            RestartMovingFromBeginning(lineRendererToFollow.positionCount - 2);
+    }
 
 
     #region START & STOP
@@ -89,8 +101,12 @@ public class Flame : MonoBehaviour
         
         nextpoinsPos = lineRendererToFollow.GetPosition(currentSectionIndex + 1);
         // If Z pos not 0, means it has burnt already, can't burn anymore
-        if (nextpoinsPos.z > 0)
+        if (nextpoinsPos.z > 0.2f)
+        {
+            Debug.Log(currentSectionIndex);
             Die();
+        }
+            
         
         currentSectionLength = CalculateCurrentSectionLength();
         currentSectionRanDistance = startValue;
@@ -142,6 +158,8 @@ public class Flame : MonoBehaviour
         transform.position = newPosition;
     }
 
+    
+    [Obsolete]
     void UpdateGradient()
     {
         
@@ -174,6 +192,9 @@ public class Flame : MonoBehaviour
 
 
 
+    
+    
+    
 
     #region PROPAGATE
     void CheckForAdjacentSection()
@@ -188,7 +209,6 @@ public class Flame : MonoBehaviour
                 SpreadFire(i);
                 canPropagate = false;
             }
-                
         }
     }
     void SpreadFire(int index)
@@ -203,13 +223,28 @@ public class Flame : MonoBehaviour
     }
     #endregion
     
+    
+    
+    
+    
 
     void TouchPlayer()
     {
-        Debug.Log("BOOM");
-        moving = false;
         Die();
     }
 
-    void Die() => Destroy(gameObject);
+    void Die()
+    {
+        DisableEffects();
+        moving = false;
+        Destroy(gameObject, 5f);
+    }
+
+    void DisableEffects()
+    {
+        if (effects != null && effects.Count > 0)
+            for (int i = 0 ; i < effects.Count; i++)
+                if (effects[i])
+                    effects[i].Stop();
+    }
 }
