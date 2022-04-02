@@ -1929,7 +1929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6223970586065089626, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
       propertyPath: indexNonSpreadRange
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6223970586065089626, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
       propertyPath: propagationCooldown
