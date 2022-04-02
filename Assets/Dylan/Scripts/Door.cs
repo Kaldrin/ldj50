@@ -8,9 +8,11 @@ public class Door : MonoBehaviour
     List<GameObject> hiddenSwitchList = new List<GameObject>();
     [SerializeField] float openSpeed;
     [SerializeField] Vector2 directionWhenOpening;
+    Vector2 initialPos;
 
     void OnEnable()
     {
+        initialPos = transform.position;
         Reset();
     }
 
@@ -21,6 +23,7 @@ public class Door : MonoBehaviour
         {
             hiddenSwitchList.Add(listOfSwitches[i]);
         }
+        transform.position = initialPos;
     }
 
     public void RemoveFromListOfSwitches(GameObject switchToRemove)
@@ -30,7 +33,7 @@ public class Door : MonoBehaviour
             StartCoroutine(Opening());
     }
 
-    void OpenAction()
+    public void OpenAction()
     {
         Vector2 goal = Vector2.zero;
         if (directionWhenOpening == Vector2.up)

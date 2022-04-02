@@ -27,7 +27,7 @@ public class Level : MonoBehaviour
     public void ChangeLevel()
     {
         EndCurrentLevel();
-        nextLevel?.StartLevel();
+        nextLevel.StartLevel();
         Invoke("RemovePreviousLevel", 2);
     }
 
@@ -43,6 +43,7 @@ public class Level : MonoBehaviour
 
     public void StartLevel()
     {
+        actionsAtStart?.Invoke();
         gameObject.SetActive(true);
         GameManager.instance.currentLevel = gameObject;
         // Reset Flame State
