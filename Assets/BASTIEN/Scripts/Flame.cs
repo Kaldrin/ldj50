@@ -56,6 +56,7 @@ public class Flame : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<Character>().Die();
+            GetComponent<AudioSource>().Stop();
             TouchPlayer();
         }
     }

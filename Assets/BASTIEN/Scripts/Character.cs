@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
     [HideInInspector] public Vector2 receivedMovementVector = new Vector2(0f, 0f);
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
     public float speed = 3f;
+    [SerializeField] AudioClip explosionSound;
 
     public static Character instance;
 
@@ -50,6 +51,7 @@ public class Character : MonoBehaviour
     {
         GetComponent<PlayerController>().enabled = false;
         // Play animation / Make Sound etc
+        GetComponent<AudioSource>().PlayOneShot(explosionSound);
         GameManager.instance.currentLevel.GetComponent<Level>().RestartLevel();
     }
     #endregion
