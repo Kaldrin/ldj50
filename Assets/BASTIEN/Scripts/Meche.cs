@@ -26,6 +26,10 @@ public class Meche : MonoBehaviour
     }
 
 
+    
+    
+    
+    
     #region FOLLOW
     void StartFollowingPlayer()
     {
@@ -66,6 +70,9 @@ public class Meche : MonoBehaviour
         }
     }
     #endregion
+    
+    
+    
     
     
     

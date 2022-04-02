@@ -12,13 +12,10 @@ public class Character : MonoBehaviour
     [SerializeField] private float speed = 3f;
 
 
-    private void Update()
-    {
-        ManagementMovements();
-    }
+    private void Update() => ManagementMovements();
 
-    
-    
+
+
     #region MOVEMENTS
 
     void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed;
