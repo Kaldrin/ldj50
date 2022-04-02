@@ -232,7 +232,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -411,6 +411,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 671637311062381804, guid: a9f00f19d7876754ca77eb4c535bd075, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9f00f19d7876754ca77eb4c535bd075, type: 3}
 --- !u!1001 &3951664268923765362
@@ -420,30 +424,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2160245499519447674, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3951664268013630099, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.42538357
-      objectReference: {fileID: 0}
-    - target: {fileID: 3951664268013630099, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 9.791827
-      objectReference: {fileID: 0}
-    - target: {fileID: 3951664268013630099, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 11.3271
-      objectReference: {fileID: 0}
-    - target: {fileID: 3951664268013630099, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.1321
-      objectReference: {fileID: 0}
-    - target: {fileID: 3951664268013630099, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3951664268343159810, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
       propertyPath: m_RootOrder
       value: 2

@@ -38,7 +38,7 @@ public class Level : MonoBehaviour
 
     public void StartLevel()
     {
-        cinemachineBrain.SetActive(true);
+        gameObject.SetActive(true);
         // Reset Flame State
     }
 }

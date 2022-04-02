@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EndLevelTrigger : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter2D(Collider2D other) {
         transform.parent.parent.GetComponent<Level>().ChangeLevel();
     }
 }
