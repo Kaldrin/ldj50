@@ -14,6 +14,7 @@ public class Flame : MonoBehaviour
     private bool canPropagate = false;
     [SerializeField] private float propagationCooldown = 2f;
     private float propagationStartTime = 0f;
+    private bool standing = true;
     
     
     
@@ -26,9 +27,13 @@ public class Flame : MonoBehaviour
 
     [Header("FX")]
     [SerializeField] private List<ParticleSystem> effects = new List<ParticleSystem>();
+    [SerializeField] private List<SpriteRenderer> sprites = new List<SpriteRenderer>();
 
+
+    [Header("COLLIDERS")] [SerializeField] private List<Collider2D> colliders = new List<Collider2D>();
     
     
+
     [Header("READ ONLY")]
     [SerializeField] private bool moving = false;
     [SerializeField] private int currentSectionIndex = 0;
@@ -50,8 +55,11 @@ public class Flame : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (!moving && col.CompareTag("Player"))
+        {
+            standing = false;
             RestartMovingFromBeginning(lineRendererToFollow.positionCount - 2);
+        }
     }
 
 
@@ -72,7 +80,8 @@ public class Flame : MonoBehaviour
             //Invoke("RestartMovingFromBeginning", 1f);
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
+    private void OnCollisionEnter2D(Collision2D other)
+    {
         if(other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<Character>().Die();
@@ -92,26 +101,23 @@ public class Flame : MonoBehaviour
         currentPointPos = lineRendererToFollow.GetPosition(currentSectionIndex);
 
         // Burn the rope
-        Vector3 burnPos = currentPointPos;
+        Vector3 burnPos = lineRendererToFollow.GetPosition(currentSectionIndex - 1);
         burnPos.z = 1;
-        lineRendererToFollow.SetPosition(currentSectionIndex, burnPos);
+        lineRendererToFollow.SetPosition(currentSectionIndex - 1, burnPos);
 
         
         
         nextpoinsPos = lineRendererToFollow.GetPosition(currentSectionIndex + 1);
         // If Z pos not 0, means it has burnt already, can't burn anymore
         if (nextpoinsPos.z > 0.2f)
-        {
-            Debug.Log(currentSectionIndex);
             Die();
-        }
-            
-        
+
+
         currentSectionLength = CalculateCurrentSectionLength();
         currentSectionRanDistance = startValue;
         //UpdateGradient();
         
-        if (canPropagate)
+        if (canPropagate && moving)
             CheckForAdjacentSection();
         //canPropagate = true;
     }
@@ -154,6 +160,7 @@ public class Flame : MonoBehaviour
         nextSectionAddedVector *= currentSectionProgressNormalized;
         Vector3 newPosition = currentPointPos + nextSectionAddedVector;
         newPosition.z = -0.5f;
+        newPosition = Vector3.Lerp(transform.position, newPosition, 0.08f);
         transform.position = newPosition;
     }
 
@@ -216,6 +223,7 @@ public class Flame : MonoBehaviour
         {
             propagationStartTime = Time.time;
             Flame newFlame = Instantiate(flamePrefab).GetComponent<Flame>();
+            newFlame.standing = false;
             newFlame.lineRendererToFollow = lineRendererToFollow;
             newFlame.RestartMovingFromBeginning(index);
         }
@@ -227,15 +235,14 @@ public class Flame : MonoBehaviour
     
     
 
-    void TouchPlayer()
-    {
-        Die();
-    }
+    void TouchPlayer() => Die();
 
     void Die()
     {
         DisableEffects();
         moving = false;
+        StartCoroutine(FadeSprites());
+        DestroyColliders();
         Destroy(gameObject, 5f);
     }
 
@@ -245,5 +252,35 @@ public class Flame : MonoBehaviour
             for (int i = 0 ; i < effects.Count; i++)
                 if (effects[i])
                     effects[i].Stop();
+    }
+
+    IEnumerator FadeSprites()
+    {
+        if (sprites != null && sprites.Count > 0)
+        {
+            bool notFaded = true;
+            while (notFaded)
+            {
+                notFaded = false;
+                for (int i = 0; i < sprites.Count; i++)
+                {
+                    if (sprites[i] && sprites[i].color.a > 0)
+                    {
+                        sprites[i].color = new Color(sprites[i].color.r, sprites[i].color.g, sprites[i].color.b, sprites[i].color.a - 0.1f);
+                        notFaded = true;
+                    }
+                }
+
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+    }
+
+    void DestroyColliders()
+    {
+        if (colliders != null && colliders.Count > 0)
+            for (int i = 0; i < colliders.Count; i++)
+                if (colliders[i])
+                    Destroy(colliders[i]);
     }
 }
