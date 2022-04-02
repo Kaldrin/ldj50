@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class Level : MonoBehaviour
 {
-    [SerializeField] GameObject cinemachineBrain;
+    public GameObject cinemachineBrain;
     [SerializeField] Level nextLevel;
     public UnityEvent actionsAtStart;
     [SerializeField] bool firstLevel;
