@@ -111,37 +111,27 @@ public class Flame : MonoBehaviour
     {
         Gradient newGradient = new Gradient();
         float ratio = (float)((float) currentSectionIndex / (float) lineRendererToFollow.positionCount);
-        Debug.Log(ratio);
-        //Debug.Log(lineRendererToFollow.positionCount);
         GradientAlphaKey[] alphaKeys = new GradientAlphaKey[4];
         GradientColorKey[] colorKeys = new GradientColorKey[2]{new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 0f)};
         
         // Leftest key
-        //GradientAlphaKey alphaKey1 = new GradientAlphaKey();
         alphaKeys[0].alpha = 0f;
         alphaKeys[0].time = 0;
         
         // Left key
-        //GradientAlphaKey alphaKey2 = new GradientAlphaKey();
         alphaKeys[1].alpha = 0f;
-        alphaKeys[1].time = ratio - ratio / 100;
+        alphaKeys[1].time = ratio + (1 / lineRendererToFollow.positionCount) * 5;
         
         // Right key
-        //GradientAlphaKey alphaKey3 = new GradientAlphaKey();
         alphaKeys[2].alpha = 1f;
-        alphaKeys[2].time = ratio + ratio / 100;
+        alphaKeys[2].time = ratio + (1 / lineRendererToFollow.positionCount) * 10;
         
         // Rightest key
-        //GradientAlphaKey alphaKey4 = new GradientAlphaKey();
         alphaKeys[3].alpha = 1f;
         alphaKeys[3].time = 1f;
 
         
-        //newGradient.alphaKeys = new GradientAlphaKey[4] { alphaKey1, alphaKey2, alphaKey3, alphaKey4};
         newGradient.SetKeys(colorKeys,alphaKeys);
-        /*lineRendererToFollow.colorGradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(Color.green, 0.0f), new GradientColorKey(Color.red, 1.0f) },
-            new GradientAlphaKey[] { new GradientAlphaKey(0, 0.0f), new GradientAlphaKey(1, 1.0f) }); */
         lineRendererToFollow.colorGradient = newGradient;
     }
     #endregion
