@@ -5,7 +5,7 @@ using UnityEngine;
 public class Level : MonoBehaviour
 {
     [SerializeField] GameObject cinemachineBrain;
-    [SerializeField] GameObject nextLevel;
+    [SerializeField] Level nextLevel;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +21,18 @@ public class Level : MonoBehaviour
 
     public void ChangeLevel()
     {
-        
+        EndCurrentLevel();
+        nextLevel?.StartLevel();
+    }
+
+    void EndCurrentLevel()
+    {
+        cinemachineBrain.SetActive(false);
+    }
+
+    public void StartLevel()
+    {
+        cinemachineBrain.SetActive(true);
+        // Reset Flame State
     }
 }
