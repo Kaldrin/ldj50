@@ -12,10 +12,17 @@ public class Meche : MonoBehaviour
     private float distanceToCreateNewPoint = 0.5f;
     private bool followingCharacter = false;
 
+    
+    
+    
     private void Start()
     {
+        // Clear line
+        if (lineRenderer)
+            lineRenderer.positionCount = 0;
+        
         if (startFollowingCharacterOnStart)
-            StartFollowingPlayer();
+            SetFollowPlayer(true);
     }
 
     private void Update()
@@ -31,18 +38,22 @@ public class Meche : MonoBehaviour
     
     
     #region FOLLOW
-    void StartFollowingPlayer()
+    void SetFollowPlayer(bool state)
     {
-        if (characterToFollow && lineRenderer)
+        if (state)
         {
-            followingCharacter = true;
+            if (characterToFollow && lineRenderer)
+            {
+                followingCharacter = true;
             
-            // Set positions of line renderer
-            Vector3[] positions = new Vector3[1] {characterToFollow.position};
-            lineRenderer.SetPositions(positions);
+                // Set positions of line renderer
+                AddPoint();
+            }
         }
-            
+        else
+            followingCharacter = false;
     }
+    
     void ManageFollow()
     {
         if (CalculateDistanceWithCharacter() >= distanceToCreateNewPoint)
@@ -65,8 +76,8 @@ public class Meche : MonoBehaviour
         if (characterToFollow && lineRenderer)
         {
             Vector3 charaPos = characterToFollow.position;
-            //Vector3[] positions = lineRenderer.GetPositions();
-            //lineRenderer.posi
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(lineRenderer.positionCount - 1, charaPos);
         }
     }
     #endregion
@@ -84,7 +95,6 @@ public class Meche : MonoBehaviour
         if (!lineRenderer && GetComponent<LineRenderer>())
             lineRenderer = GetComponent<LineRenderer>();
     }
-
     private void OnValidate() => GetMissingComponents();
     #endregion
 

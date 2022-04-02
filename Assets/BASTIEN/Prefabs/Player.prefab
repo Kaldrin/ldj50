@@ -193,7 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid2D: {fileID: 671637311062381806}
   receivedMovementVector: {x: 0, y: 0}
-  speed: 3
+  speed: 400
 --- !u!50 &671637311062381806
 Rigidbody2D:
   serializedVersion: 4

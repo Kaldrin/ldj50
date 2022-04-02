@@ -12,13 +12,14 @@ public class Character : MonoBehaviour
     public float speed = 3f;
 
 
-    private void Update() => ManagementMovements();
+    private void FixedUpdate() => ManagementMovements();
+
+
 
 
 
     #region MOVEMENTS
-
-    void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed;
+    void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed * Time.deltaTime;
     void ManagementMovements()
     {
         CalculateMovement();
