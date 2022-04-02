@@ -23,11 +23,17 @@ public class Level : MonoBehaviour
     {
         EndCurrentLevel();
         nextLevel?.StartLevel();
+        Invoke("RemovePreviousLevel", .5f);
     }
 
     void EndCurrentLevel()
     {
         cinemachineBrain.SetActive(false);
+    }
+
+    void RemovePreviousLevel()
+    {
+        gameObject.SetActive(false);
     }
 
     public void StartLevel()
