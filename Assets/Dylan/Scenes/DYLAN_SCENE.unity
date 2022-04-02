@@ -865,6 +865,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &975554978 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6223970586065089628, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
+  m_PrefabInstance: {fileID: 1955719791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1224224901
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,6 +1390,11 @@ Transform:
   m_Father: {fileID: 748030868}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1674170438 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3942502656783056304, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
+  m_PrefabInstance: {fileID: 3951664268923765362}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1772888048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1803,6 +1813,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 27995505, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1956451567, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2120788894, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6223970586065089626, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
       propertyPath: speed
       value: 4
@@ -1858,6 +1880,14 @@ PrefabInstance:
     - target: {fileID: 6223970586065089628, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
       propertyPath: m_Name
       value: Flame
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223970586065089628, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223970587374805009, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
@@ -2372,6 +2402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2115867185}
   - component: {fileID: 2115867184}
+  - component: {fileID: 2115867186}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -2405,6 +2436,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2115867186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115867183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 599d63325dcffda4ebdce5154870fefd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: {fileID: 0}
+  flame: {fileID: 975554978}
 --- !u!1001 &1328054768954734563
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2458,6 +2503,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8061845065006877886, guid: 875ad752c7a8a184883de74c4d045f33, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061845065006877886, guid: 875ad752c7a8a184883de74c4d045f33, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2529,10 +2578,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level
       objectReference: {fileID: 0}
+    - target: {fileID: 8854657633721670896, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 8854657633721670896, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.61
+      objectReference: {fileID: 0}
     - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
       propertyPath: nextLevel
       value: 
       objectReference: {fileID: 1379230129}
+    - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
+      propertyPath: firstLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
+      propertyPath: startPoint
+      value: 
+      objectReference: {fileID: 1674170438}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
 --- !u!4 &8421024360989406237 stripped

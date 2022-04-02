@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+    public GameObject currentLevel;
+    public GameObject flame;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        instance = this;
     }
 
     // Update is called once per frame

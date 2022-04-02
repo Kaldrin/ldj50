@@ -44,4 +44,13 @@ public class Character : MonoBehaviour
     private void Awake() {
         instance = this;
     }
+
+    #region DIE
+    public void Die()
+    {
+        GetComponent<PlayerController>().enabled = false;
+        // Play animation / Make Sound etc
+        GameManager.instance.currentLevel.GetComponent<Level>().RestartLevel();
+    }
+    #endregion
 }

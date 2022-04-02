@@ -30,7 +30,7 @@ public class Flame : MonoBehaviour
         if (startOnStart)
             Invoke("StartMoving", 3f);
     }
-    void StartMoving() => RestartMovingFromBeginning(0);
+    public void StartMoving() => RestartMovingFromBeginning(0);
     private void Update() => UpdateMoving();
 
 
@@ -50,6 +50,14 @@ public class Flame : MonoBehaviour
         }
         //else
             //Invoke("RestartMovingFromBeginning", 1f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.tag == "Player")
+        {
+            other.gameObject.GetComponent<Character>().Die();
+            TouchPlayer();
+        }
     }
     #endregion
     
