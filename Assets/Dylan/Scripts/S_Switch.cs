@@ -9,9 +9,14 @@ public class S_Switch : MonoBehaviour
     [SerializeField] Sprite defaultSprite;
     [SerializeField] Sprite spriteWhilePressed;
     
+    private void OnEnable() {
+        Reset();
+    }
+
     private void OnTriggerEnter2D(Collider2D other) {
         GetComponent<SpriteRenderer>().sprite = spriteWhilePressed;
         action.Invoke();
+        GetComponent<Collider2D>().enabled = false;
         //gameObject.SetActive(false);
     }
 
@@ -19,5 +24,6 @@ public class S_Switch : MonoBehaviour
     {
         //gameObject.SetActive(true);
         GetComponent<SpriteRenderer>().sprite = defaultSprite;
+        GetComponent<Collider2D>().enabled = true;
     }
 }

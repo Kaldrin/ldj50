@@ -9,7 +9,6 @@ public class Door : MonoBehaviour
     [SerializeField] float openSpeed;
     [SerializeField] Vector2 directionWhenOpening;
 
-    // Start is called before the first frame update
     void OnEnable()
     {
         Reset();

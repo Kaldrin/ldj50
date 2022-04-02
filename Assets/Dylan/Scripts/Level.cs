@@ -1,29 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Level : MonoBehaviour
 {
     [SerializeField] GameObject cinemachineBrain;
     [SerializeField] Level nextLevel;
+    public UnityEvent actionsAtStart;
+    [SerializeField] bool firstLevel;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private void Start() {
+        if(firstLevel)
+            SetAllObjects();
     }
 
-    // Update is called once per frame
-    void Update()
+    void SetAllObjects()
     {
-        
+        actionsAtStart?.Invoke();
     }
 
     public void ChangeLevel()
     {
         EndCurrentLevel();
         nextLevel?.StartLevel();
-        Invoke("RemovePreviousLevel", .5f);
+        Invoke("RemovePreviousLevel", 2);
     }
 
     void EndCurrentLevel()

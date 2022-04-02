@@ -11,6 +11,8 @@ public class Character : MonoBehaviour
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
     public float speed = 3f;
 
+    public static Character instance;
+
 
     private void FixedUpdate() => ManagementMovements();
 
@@ -38,4 +40,8 @@ public class Character : MonoBehaviour
             rigid2D = GetComponent<Rigidbody2D>();
     }
     private void OnValidate() => GetMissingComponents();
+
+    private void Awake() {
+        instance = this;
+    }
 }
