@@ -8,18 +8,24 @@ public class Flame : MonoBehaviour
     [SerializeField] private LineRenderer lineRendererToFollow = null;
     [SerializeField] private float speed = 0.002f;
     [SerializeField] private bool startOnStart = false;
-    [SerializeField] private float distanceToSpread = 4f;
+    [SerializeField] private float distanceToSpread = 0f;
     [SerializeField] private GameObject flamePrefab = null;
-    private bool moving = false;
+    [SerializeField] private int indexNonSpreadRange = 5;
+    private bool canPropagate = false;
+    private float propagationCooldown = 3f;
+    private float propagationStartTime = 0f;
     
     
-    private int currentSectionIndex = 0;
+    
+    
     private float currentSectionLength = 0f;
     private float currentSectionRanDistance = 0f;
     private Vector3 currentPointPos = new Vector3(0f, 0f, 0f);
     private Vector3 nextpoinsPos = new Vector3(0f, 0f, 0f);
-
-
+    
+    [Header("READ ONLY")]
+    [SerializeField] private bool moving = false;
+    [SerializeField] private int currentSectionIndex = 0;
     
     
     
@@ -43,6 +49,8 @@ public class Flame : MonoBehaviour
     {
         if (lineRendererToFollow && lineRendererToFollow.positionCount > 5)
         {
+            canPropagate = false;
+            propagationStartTime = Time.time;
             currentSectionIndex = index;
             //transform.position = lineRendererToFollow.GetPosition(0);
             NewSection(index, 0);
@@ -85,7 +93,11 @@ public class Flame : MonoBehaviour
         
         currentSectionLength = CalculateCurrentSectionLength();
         currentSectionRanDistance = startValue;
-        UpdateGradient();
+        //UpdateGradient();
+        
+        if (canPropagate)
+            CheckForAdjacentSection();
+        //canPropagate = true;
     }
     
     float CalculateCurrentSectionLength()
@@ -100,6 +112,10 @@ public class Flame : MonoBehaviour
     {
         if (moving)
         {
+            if (Time.time > propagationStartTime + propagationCooldown)
+                canPropagate = true;
+            
+            
             currentSectionRanDistance += speed * Time.deltaTime;
             // If reached the end of the section
             if (currentSectionRanDistance >= currentSectionLength)
@@ -114,21 +130,20 @@ public class Flame : MonoBehaviour
             SetPos();
         }
     }
+
     void SetPos()
     {
         float currentSectionProgressNormalized = currentSectionRanDistance / currentSectionLength;
         Vector3 nextSectionAddedVector = nextpoinsPos - currentPointPos;
         nextSectionAddedVector *= currentSectionProgressNormalized;
         Vector3 newPosition = currentPointPos + nextSectionAddedVector;
-        try
-        {
-            transform.position = newPosition;
-        }
-        catch { }
+        newPosition.z = -0.5f;
+        transform.position = newPosition;
     }
 
     void UpdateGradient()
     {
+        
         Gradient newGradient = new Gradient();
         float ratio = (float)((float) currentSectionIndex / (float) lineRendererToFollow.positionCount);
         GradientAlphaKey[] alphaKeys = new GradientAlphaKey[4];
@@ -162,18 +177,28 @@ public class Flame : MonoBehaviour
     #region PROPAGATE
     void CheckForAdjacentSection()
     {
-        for (int i = 0; i < lineRendererToFollow.positionCount; i++)
+        for (int i = 0; i < lineRendererToFollow.positionCount - 1; i++)
         {
+            int indexDifference = Mathf.Abs(currentSectionIndex - i);
             Vector3 position = lineRendererToFollow.GetPosition(i);
-            if (position.z == 0 && Vector3.Distance(position, transform.position) < distanceToSpread);
+
+            if (canPropagate && position.z == 0 && Vector3.Distance(position, transform.position) < distanceToSpread && indexDifference > indexNonSpreadRange)
+            {
                 SpreadFire(i);
+                canPropagate = false;
+            }
+                
         }
     }
     void SpreadFire(int index)
     {
-        Flame newFlame = Instantiate(flamePrefab).GetComponent<Flame>();
-        newFlame.lineRendererToFollow = lineRendererToFollow;
-        newFlame.RestartMovingFromBeginning(index);
+        if (canPropagate)
+        {
+            propagationStartTime = Time.time;
+            Flame newFlame = Instantiate(flamePrefab).GetComponent<Flame>();
+            newFlame.lineRendererToFollow = lineRendererToFollow;
+            newFlame.RestartMovingFromBeginning(index);
+        }
     }
     #endregion
     
@@ -182,6 +207,7 @@ public class Flame : MonoBehaviour
     {
         Debug.Log("BOOM");
         moving = false;
+        Die();
     }
 
     void Die() => Destroy(gameObject);
