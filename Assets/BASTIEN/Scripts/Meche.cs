@@ -25,6 +25,14 @@ public class Meche : MonoBehaviour
             SetFollowPlayer(true);
     }
 
+
+    public void Reset()
+    {
+        SetFollowPlayer(false);
+        lineRenderer.positionCount = 0;
+    }
+
+    
     private void Update()
     {
         // Follow character
@@ -83,14 +91,14 @@ public class Meche : MonoBehaviour
         }
     }
     #endregion
+
+
+
     
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
     #region EDITOR
     void GetMissingComponents()
     {
