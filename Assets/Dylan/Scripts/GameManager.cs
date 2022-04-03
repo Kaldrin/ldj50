@@ -9,14 +9,6 @@ public class GameManager : MonoBehaviour
     public GameObject flame;
 
     // Start is called before the first frame update
-    void Awake()
-    {
-        instance = this;
-    }
+    void Awake() => instance = this;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
