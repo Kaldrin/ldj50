@@ -10,6 +10,7 @@ public class Door : MonoBehaviour
     [SerializeField] float openSpeed;
     [SerializeField] Vector2 directionWhenOpening;
     Vector2 initialPos;
+    IEnumerator reset;
 
 
     [Header("AUDIO")] [SerializeField] private AudioFade audioFade = null;
@@ -28,7 +29,8 @@ public class Door : MonoBehaviour
         for (int i = 0; i < listOfSwitches.Count; i++)
             hiddenSwitchList.Add(listOfSwitches[i]);
         //transform.position = initialPos;
-        StartCoroutine(ResetPosition());
+        reset = ResetPosition();
+        StartCoroutine(reset);
     }
 
     public void RemoveFromListOfSwitches(GameObject switchToRemove)
@@ -72,6 +74,8 @@ public class Door : MonoBehaviour
 
     IEnumerator Opening()
     {
+        StopCoroutine(reset);
+
         Vector2 goal = Vector2.zero;
         if (directionWhenOpening.y > 0)
             goal = new Vector2(transform.position.x, transform.position.y + transform.localScale.y);
