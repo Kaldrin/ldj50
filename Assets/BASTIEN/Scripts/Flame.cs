@@ -63,10 +63,9 @@ public class Flame : MonoBehaviour
         }
         else if (moving && col.CompareTag("Player"))
         {
-            col.transform.parent.GetComponent<Character>().Die();
             col.transform.parent.GetComponent<AudioSource>().Stop();
+            col.transform.parent.GetComponent<Character>().Die();
             TouchPlayer();
-
         }
     }
 

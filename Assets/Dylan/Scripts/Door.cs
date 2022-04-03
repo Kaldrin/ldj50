@@ -55,18 +55,18 @@ public class Door : MonoBehaviour
     IEnumerator Opening()
     {
         Vector2 goal = Vector2.zero;
-        if (directionWhenOpening == Vector2.up)
+        if (directionWhenOpening.y > 0)
             goal = new Vector2(transform.position.x, transform.position.y + transform.localScale.y);
-        else if (directionWhenOpening == Vector2.down)
+        else if (directionWhenOpening.y < 0)
             goal = new Vector2(transform.position.x, transform.position.y - transform.localScale.y);
-        else if (directionWhenOpening == Vector2.left)
+        else if (directionWhenOpening.x < 0)
             goal = new Vector2(transform.position.x - transform.localScale.x, transform.position.y);
-        else if (directionWhenOpening == Vector2.right)
+        else if (directionWhenOpening.x > 0)
             goal = new Vector2(transform.position.x + transform.localScale.x, transform.position.y);
 
         while (Vector2.Distance(transform.position, goal) != 0)
         {
-            Vector2 pos = Vector2.MoveTowards(transform.position, goal, openSpeed * Time.deltaTime);
+            Vector2 pos = Vector2.MoveTowards(transform.position, goal + directionWhenOpening, openSpeed * Time.deltaTime);
             transform.position = pos;
             yield return null;
         }
