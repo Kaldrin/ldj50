@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
     [HideInInspector] public Vector2 receivedMovementVector = new Vector2(0f, 0f);
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
     public float speed = 3f;
+    [SerializeField] AudioClip explosionSound;
 
     public static Character instance;
 
@@ -29,9 +30,9 @@ public class Character : MonoBehaviour
             rigid2D.velocity = actualMovementVector;
     }
     #endregion
-    
-    
-    
+
+
+
     // EDITOR
     // Automatically assign some references
     void GetMissingComponents()
@@ -41,7 +42,8 @@ public class Character : MonoBehaviour
     }
     private void OnValidate() => GetMissingComponents();
 
-    private void Awake() {
+    private void Awake()
+    {
         instance = this;
     }
 
@@ -50,7 +52,23 @@ public class Character : MonoBehaviour
     {
         GetComponent<PlayerController>().enabled = false;
         // Play animation / Make Sound etc
+        StartCoroutine(Explode());
+    }
+
+    IEnumerator Explode()
+    {
+        transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        GetComponent<AudioSource>().PlayOneShot(explosionSound);
+        GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(.8f, .5f);
+        Meche.instance.Reset();
+        yield return new WaitForSeconds(1f);
         GameManager.instance.currentLevel.GetComponent<Level>().RestartLevel();
+        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
+        transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
+        transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
     }
     #endregion
 }

@@ -11,16 +11,24 @@ public class Meche : MonoBehaviour
     [SerializeField] private bool startFollowingCharacterOnStart = false;
     private float distanceToCreateNewPoint = 0.5f;
     private bool followingCharacter = false;
+    [SerializeField] int amountOfPointsBeforeToSpawnFlame;
+    int currentAmountOfPoints;
+    [SerializeField] bool originalMeche;
+    public static Meche instance;
+    bool flameExists;
 
-    
-    
-    
+    private void Awake()
+    {
+        if (originalMeche)
+            instance = this;
+    }
+
     private void Start()
     {
         // Clear line
         if (lineRenderer)
             lineRenderer.positionCount = 0;
-        
+
         if (startFollowingCharacterOnStart)
             SetFollowPlayer(true);
     }
@@ -30,9 +38,11 @@ public class Meche : MonoBehaviour
     {
         SetFollowPlayer(false);
         lineRenderer.positionCount = 0;
+        currentAmountOfPoints = 0;
+        flameExists = false;
     }
 
-    
+
     private void Update()
     {
         // Follow character
@@ -41,10 +51,10 @@ public class Meche : MonoBehaviour
     }
 
 
-    
-    
-    
-    
+
+
+
+
     #region FOLLOW
     void SetFollowPlayer(bool state)
     {
@@ -53,7 +63,7 @@ public class Meche : MonoBehaviour
             if (characterToFollow && lineRenderer)
             {
                 followingCharacter = true;
-            
+
                 // Set positions of line renderer
                 AddPoint();
             }
@@ -61,11 +71,24 @@ public class Meche : MonoBehaviour
         else
             followingCharacter = false;
     }
-    
+
     void ManageFollow()
     {
         if (CalculateDistanceWithCharacter() >= distanceToCreateNewPoint)
             AddPoint();
+
+        if (!followingCharacter) return;
+
+        if (flameExists) return;
+
+        if (currentAmountOfPoints == amountOfPointsBeforeToSpawnFlame)
+        {
+            followingCharacter = true;
+            GameObject pref = Instantiate(GameManager.instance.flame);
+            pref.GetComponent<Flame>().lineRendererToFollow = GetComponent<LineRenderer>();
+            pref.GetComponent<Flame>().RestartMovingFromBeginning(0);
+            flameExists = true;
+        }
     }
 
     float CalculateDistanceWithCharacter()
@@ -88,13 +111,14 @@ public class Meche : MonoBehaviour
             charaPos = new Vector3(charaPos.x, charaPos.y, 0);
             lineRenderer.positionCount++;
             lineRenderer.SetPosition(lineRenderer.positionCount - 1, charaPos);
+            currentAmountOfPoints++;
         }
     }
     #endregion
 
 
 
-    
+
 
 
 

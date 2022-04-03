@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Flame : MonoBehaviour
 {
-    [SerializeField] private LineRenderer lineRendererToFollow = null;
+    public LineRenderer lineRendererToFollow = null;
     [SerializeField] private float speed = 0.002f;
     [SerializeField] private bool startOnStart = false;
     [SerializeField] private float distanceToSpread = 0f;
@@ -15,10 +15,10 @@ public class Flame : MonoBehaviour
     [SerializeField] private float propagationCooldown = 2f;
     private float propagationStartTime = 0f;
     private bool standing = true;
-    
-    
-    
-    
+
+
+
+
     private float currentSectionLength = 0f;
     private float currentSectionRanDistance = 0f;
     private Vector3 currentPointPos = new Vector3(0f, 0f, 0f);
@@ -30,18 +30,18 @@ public class Flame : MonoBehaviour
     [SerializeField] private List<SpriteRenderer> sprites = new List<SpriteRenderer>();
 
 
-    [Header("COLLIDERS")] [SerializeField] private List<Collider2D> colliders = new List<Collider2D>();
-    
-    
+    [Header("COLLIDERS")][SerializeField] private List<Collider2D> colliders = new List<Collider2D>();
+
+
 
     [Header("READ ONLY")]
     [SerializeField] private bool moving = false;
     [SerializeField] private int currentSectionIndex = 0;
-    
-    
-    
-    
-    
+
+
+
+
+
     private void Start()
     {
         /*
@@ -60,6 +60,13 @@ public class Flame : MonoBehaviour
             standing = false;
             RestartMovingFromBeginning(lineRendererToFollow.positionCount - 2);
         }
+        else if (moving && col.CompareTag("Player"))
+        {
+            col.transform.parent.GetComponent<Character>().Die();
+            col.transform.parent.GetComponent<AudioSource>().Stop();
+            TouchPlayer();
+
+        }
     }
 
 
@@ -77,24 +84,15 @@ public class Flame : MonoBehaviour
             SetMoving(true);
         }
         //else
-            //Invoke("RestartMovingFromBeginning", 1f);
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if(other.gameObject.tag == "Player")
-        {
-            other.gameObject.GetComponent<Character>().Die();
-            TouchPlayer();
-        }
+        //Invoke("RestartMovingFromBeginning", 1f);
     }
     #endregion
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     #region MOVING
     void NewSection(int newSectionIndex, float startValue)
     {
@@ -105,8 +103,8 @@ public class Flame : MonoBehaviour
         burnPos.z = 1;
         lineRendererToFollow.SetPosition(currentSectionIndex - 1, burnPos);
 
-        
-        
+
+
         nextpoinsPos = lineRendererToFollow.GetPosition(currentSectionIndex + 1);
         // If Z pos not 0, means it has burnt already, can't burn anymore
         if (nextpoinsPos.z > 0.2f)
@@ -116,12 +114,12 @@ public class Flame : MonoBehaviour
         currentSectionLength = CalculateCurrentSectionLength();
         currentSectionRanDistance = startValue;
         //UpdateGradient();
-        
+
         if (canPropagate && moving)
             CheckForAdjacentSection();
         //canPropagate = true;
     }
-    
+
     float CalculateCurrentSectionLength()
     {
         float distance = 0f;
@@ -136,8 +134,8 @@ public class Flame : MonoBehaviour
         {
             if (Time.time > propagationStartTime + propagationCooldown)
                 canPropagate = true;
-            
-            
+
+
             currentSectionRanDistance += speed * Time.deltaTime;
             // If reached the end of the section
             if (currentSectionRanDistance >= currentSectionLength)
@@ -164,43 +162,43 @@ public class Flame : MonoBehaviour
         transform.position = newPosition;
     }
 
-    
+
     [Obsolete]
     void UpdateGradient()
     {
-        
+
         Gradient newGradient = new Gradient();
-        float ratio = (float)((float) currentSectionIndex / (float) lineRendererToFollow.positionCount);
+        float ratio = (float)((float)currentSectionIndex / (float)lineRendererToFollow.positionCount);
         GradientAlphaKey[] alphaKeys = new GradientAlphaKey[4];
-        GradientColorKey[] colorKeys = new GradientColorKey[2]{new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 0f)};
-        
+        GradientColorKey[] colorKeys = new GradientColorKey[2] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 0f) };
+
         // Leftest key
         alphaKeys[0].alpha = 0f;
         alphaKeys[0].time = 0;
-        
+
         // Left key
         alphaKeys[1].alpha = 0f;
         alphaKeys[1].time = ratio + (1 / lineRendererToFollow.positionCount) * 5;
-        
+
         // Right key
         alphaKeys[2].alpha = 1f;
         alphaKeys[2].time = ratio + (1 / lineRendererToFollow.positionCount) * 10;
-        
+
         // Rightest key
         alphaKeys[3].alpha = 1f;
         alphaKeys[3].time = 1f;
 
-        
-        newGradient.SetKeys(colorKeys,alphaKeys);
+
+        newGradient.SetKeys(colorKeys, alphaKeys);
         lineRendererToFollow.colorGradient = newGradient;
     }
     #endregion
 
 
 
-    
-    
-    
+
+
+
 
     #region PROPAGATE
     void CheckForAdjacentSection()
@@ -229,11 +227,11 @@ public class Flame : MonoBehaviour
         }
     }
     #endregion
-    
-    
-    
-    
-    
+
+
+
+
+
 
     void TouchPlayer() => Die();
 
@@ -249,7 +247,7 @@ public class Flame : MonoBehaviour
     void DisableEffects()
     {
         if (effects != null && effects.Count > 0)
-            for (int i = 0 ; i < effects.Count; i++)
+            for (int i = 0; i < effects.Count; i++)
                 if (effects[i])
                     effects[i].Stop();
     }
