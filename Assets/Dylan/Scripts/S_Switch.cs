@@ -8,6 +8,13 @@ public class S_Switch : MonoBehaviour
     public UnityEvent action;
     [SerializeField] Sprite defaultSprite;
     [SerializeField] Sprite spriteWhilePressed;
+
+    [Header("FX")]
+    [SerializeField] private ParticleSystem pressFX = null;
+    [SerializeField] private AudioSource soundFx = null;
+    
+    
+    
     
     private void OnEnable() {
         Reset();
@@ -17,6 +24,15 @@ public class S_Switch : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = spriteWhilePressed;
         action.Invoke();
         GetComponent<Collider2D>().enabled = false;
+        
+        
+        // FX
+        if (pressFX)
+            pressFX.Play();
+        
+        // AUDIO
+        if (soundFx)
+            soundFx.Play();
         //gameObject.SetActive(false);
     }
 

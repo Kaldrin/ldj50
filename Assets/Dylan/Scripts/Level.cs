@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,10 +20,7 @@ public class Level : MonoBehaviour
         }
     }
 
-    void SetAllObjects()
-    {
-        actionsAtStart?.Invoke();
-    }
+    void SetAllObjects() => actionsAtStart?.Invoke();
 
     public void ChangeLevel()
     {
@@ -31,15 +29,8 @@ public class Level : MonoBehaviour
         Invoke("RemovePreviousLevel", 2);
     }
 
-    void EndCurrentLevel()
-    {
-        cinemachineBrain.SetActive(false);
-    }
-
-    void RemovePreviousLevel()
-    {
-        gameObject.SetActive(false);
-    }
+    void EndCurrentLevel() => cinemachineBrain.SetActive(false);
+    void RemovePreviousLevel() => gameObject.SetActive(false);
 
     public void StartLevel()
     {
@@ -59,9 +50,35 @@ public class Level : MonoBehaviour
     IEnumerator WaitBeforeRestart()
     {
         Meche.instance.Reset();
+        
+        
+        // Kill flames
+        foreach (Flame flame in FindObjectsOfType<Flame>())
+            flame.Die();
+        
+        RestartLevelElements();
+        
+        
         yield return new WaitForSeconds(1);
+
+
+        
         Character.instance.GetControlsBack();
         Meche.instance.SetFollowPlayer(true);
-        //Instantiate(GameManager.instance.flame);
+        /*
+        if (!firstLevel)
+            Instantiate(GameManager.instance.flame);
+            */
+    }
+
+
+    void RestartLevelElements()
+    {
+        foreach (Door door in FindObjectsOfType<Door>())
+            if (door)
+                door.Reset();
+        foreach (S_Switch switchs in FindObjectsOfType<S_Switch>())
+            if (switchs)
+                switchs.Reset();
     }
 }

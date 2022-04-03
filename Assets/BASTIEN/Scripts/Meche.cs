@@ -16,6 +16,7 @@ public class Meche : MonoBehaviour
     [SerializeField] bool originalMeche;
     public static Meche instance;
     bool flameExists;
+    public bool burning = false;
 
     private void Awake()
     {
@@ -77,14 +78,15 @@ public class Meche : MonoBehaviour
         if (CalculateDistanceWithCharacter() >= distanceToCreateNewPoint)
             AddPoint();
 
-        if (!followingCharacter) return;
-
-        if (flameExists) return;
-
-        if (currentAmountOfPoints == amountOfPointsBeforeToSpawnFlame)
+        if (!followingCharacter)
+            return;
+        if (flameExists)
+            return;
+        if (burning && currentAmountOfPoints == amountOfPointsBeforeToSpawnFlame)
         {
             followingCharacter = true;
             GameObject pref = Instantiate(GameManager.instance.flame);
+            pref.transform.position = lineRenderer.GetPosition(0);
             pref.GetComponent<Flame>().lineRendererToFollow = GetComponent<LineRenderer>();
             pref.GetComponent<Flame>().RestartMovingFromBeginning(0);
             flameExists = true;

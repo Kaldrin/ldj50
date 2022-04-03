@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class Character : MonoBehaviour
 {
@@ -15,18 +18,33 @@ public class Character : MonoBehaviour
 
     bool canSendInputs = true;
 
+
+
+    [Header("FX")]
+    [SerializeField] private ParticleSystem explosionFX = null;
+    [SerializeField] private GameObject graphicsParent = null;
+
+
+
+    [Header("AUDIO")]
+    [SerializeField] private AudioSource explosionSFX = null;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     void StopMoving()
     {
         canSendInputs = false;
         rigid2D.velocity = Vector2.zero;
     }
-
-    public void GetControlsBack()
-    {
-        canSendInputs = true;
-    }
-
-
+    public void GetControlsBack() => canSendInputs = true;
     private void FixedUpdate() => ManagementMovements();
 
 
@@ -57,10 +75,7 @@ public class Character : MonoBehaviour
     }
     private void OnValidate() => GetMissingComponents();
 
-    private void Awake()
-    {
-        instance = this;
-    }
+    private void Awake() => instance = this;
 
     #region DIE
     public void Die()
@@ -72,18 +87,41 @@ public class Character : MonoBehaviour
     IEnumerator Explode()
     {
         StopMoving();
-        transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
-        transform.GetChild(0).GetComponent<AudioSource>().Play();
+        
+        
+        // FX
+        if (explosionFX)
+            explosionFX.Play();
+        if (graphicsParent)
+            graphicsParent.SetActive(false);
+        
+        
+        // AUDIO
+        if (explosionSFX)
+            explosionSFX.Play();
+        
+        
+        //transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        //transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        //transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        //transform.GetChild(0)?.GetComponent<AudioSource>()?.Play();
         GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(.8f, .5f);
         Meche.instance.Reset();
+        
+        
+        
         yield return new WaitForSeconds(1f);
+        
+        
+        // RESET
+        graphicsParent?.SetActive(true);
         GameManager.instance.currentLevel.GetComponent<Level>().RestartLevel();
-        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
-        transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
-        transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+        
+        
+        //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
+        //transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
+        //transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
     }
     #endregion
 }

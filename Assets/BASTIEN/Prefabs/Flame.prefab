@@ -4869,7 +4869,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -9682,7 +9682,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -14642,7 +14642,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -14716,12 +14716,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRendererToFollow: {fileID: 0}
-  speed: 2
+  speed: 4
   startOnStart: 1
   distanceToSpread: 1
   flamePrefab: {fileID: 6223970586065089628}
   indexNonSpreadRange: 8
   propagationCooldown: 0.7
+  spawnPropagationCooldown: 1
   effects:
   - {fileID: 2120788897}
   - {fileID: 1296002996}

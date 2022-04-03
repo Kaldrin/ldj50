@@ -13,6 +13,8 @@ public class Flame : MonoBehaviour
     [SerializeField] private int indexNonSpreadRange = 5;
     private bool canPropagate = false;
     [SerializeField] private float propagationCooldown = 2f;
+    [SerializeField] private float spawnPropagationCooldown = 1f;
+    
     private float propagationStartTime = 0f;
     private bool standing = true;
 
@@ -48,7 +50,7 @@ public class Flame : MonoBehaviour
         if (startOnStart)
             Invoke("StartMoving", 3f);
             */
-        Character.instance.GetComponent<AudioSource>().Play();
+        //Character.instance.GetComponent<AudioSource>().Play();
     }
     public void StartMoving() => RestartMovingFromBeginning(0);
     private void Update() => UpdateMoving();
@@ -59,13 +61,11 @@ public class Flame : MonoBehaviour
         if (!moving && col.CompareTag("Player"))
         {
             standing = false;
+            lineRendererToFollow.GetComponent<Meche>().burning = true;
             RestartMovingFromBeginning(lineRendererToFollow.positionCount - 2);
         }
         else if (moving && col.CompareTag("Player"))
-        {
-            
             TouchPlayer();
-        }
     }
 
 
@@ -98,9 +98,16 @@ public class Flame : MonoBehaviour
         currentPointPos = lineRendererToFollow.GetPosition(currentSectionIndex);
 
         // Burn the rope
-        Vector3 burnPos = lineRendererToFollow.GetPosition(currentSectionIndex - 1);
-        burnPos.z = 1;
-        lineRendererToFollow.SetPosition(currentSectionIndex - 1, burnPos);
+        if (lineRendererToFollow.positionCount > currentSectionIndex - 1 && currentSectionIndex - 1 >= 0)
+        {
+            Vector3 burnPos = lineRendererToFollow.GetPosition(currentSectionIndex - 1);
+            burnPos.z = 1;
+            lineRendererToFollow.SetPosition(currentSectionIndex - 1, burnPos);
+        }
+        
+                
+
+        
 
 
 
@@ -158,7 +165,8 @@ public class Flame : MonoBehaviour
         Vector3 newPosition = currentPointPos + nextSectionAddedVector;
         newPosition.z = -0.5f;
         newPosition = Vector3.Lerp(transform.position, newPosition, 0.08f);
-        transform.position = newPosition;
+        if (moving)
+            transform.position = newPosition;
     }
 
 
@@ -239,7 +247,7 @@ public class Flame : MonoBehaviour
         Die();
     }
 
-    void Die()
+    public void Die()
     {
         DisableEffects();
         moving = false;
