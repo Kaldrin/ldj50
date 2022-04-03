@@ -16,7 +16,7 @@ public class PlayerSpeedModifiers : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.tag == "SlowerZone")
-            chara.speed = startSpeed - startSpeed * 80 / 100;
+            chara.speed = startSpeed - startSpeed * 60 / 100;
         else if (other.gameObject.tag == "FasterZone")
             chara.speed = startSpeed + startSpeed * 60 / 100;
     }

@@ -13,8 +13,10 @@ public class Door : MonoBehaviour
     IEnumerator reset;
     IEnumerator open;
 
-
-    [Header("AUDIO")] [SerializeField] private AudioFade audioFade = null;
+    [Header("FX")]
+    [SerializeField] private ParticleSystem dustFX = null;
+    [Header("AUDIO")]
+    [SerializeField] private AudioFade audioFade = null;
     
     
     
@@ -38,6 +40,11 @@ public class Door : MonoBehaviour
         // AUDIO
         if (audioFade)
             audioFade.FadeOut();
+        
+        
+        // FX
+        if (dustFX)
+            dustFX.Stop();
         
         
         //StartCoroutine(ResetPosition());
@@ -74,15 +81,20 @@ public class Door : MonoBehaviour
         }
             
         
-        while (Vector2.Distance(transform.position, goal) != 0)
+        while (Vector2.Distance(transform.position, goal) > 0.05f)
         {
             Vector2 pos = Vector2.MoveTowards(transform.position, goal, openSpeed * Time.deltaTime);
             transform.position = pos;
         }
+        transform.position = goal;
         
         // AUDIO
         if (audioFade)
             audioFade.FadeOut();
+        
+        // FX
+        if (dustFX)
+            dustFX.Stop();
     }
 
     IEnumerator Opening()
@@ -91,14 +103,15 @@ public class Door : MonoBehaviour
 
         Vector2 goal = Vector2.zero;
         if (directionWhenOpening.y > 0)
-            goal = new Vector2(transform.position.x, transform.position.y + transform.localScale.y);
+            goal = new Vector2(transform.position.x, transform.position.y + transform.localScale.y * directionWhenOpening.y);
         else if (directionWhenOpening.y < 0)
-            goal = new Vector2(transform.position.x, transform.position.y - transform.localScale.y);
+            goal = new Vector2(transform.position.x, transform.position.y - transform.localScale.y * - directionWhenOpening.y);
         else if (directionWhenOpening.x < 0)
-            goal = new Vector2(transform.position.x - transform.localScale.x, transform.position.y);
+            goal = new Vector2(transform.position.x - transform.localScale.x * - directionWhenOpening.x, transform.position.y);
         else if (directionWhenOpening.x > 0)
-            goal = new Vector2(transform.position.x + transform.localScale.x, transform.position.y);
+            goal = new Vector2(transform.position.x + transform.localScale.x * directionWhenOpening.x, transform.position.y);
 
+        
         
         // AUDIO
         if (audioFade)
@@ -107,24 +120,34 @@ public class Door : MonoBehaviour
             audioFade.FadeIn();
         }
         
+        // FX
+        if (dustFX)
+            dustFX.Play();
         
-        while (Vector2.Distance(transform.position, goal) != 0)
+        
+        while (Vector2.Distance(transform.position, goal) > 0.05f)
         {
             Vector2 pos = Vector2.MoveTowards(transform.position, goal + directionWhenOpening, openSpeed * Time.deltaTime);
             transform.position = pos;
             yield return null;
         }
+        transform.position = goal;
         
         // AUDIO
         if (audioFade)
             audioFade.FadeOut();
+        
+        // FX
+        if (dustFX)
+            dustFX.Stop();
     }
 
 
 
     IEnumerator ResetPosition()
     {
-        StopCoroutine(open);
+        if (open != null)
+            StopCoroutine(open);
         while (Vector2.Distance(transform.position, initialPos) != 0)
         {
             Vector2 pos = Vector2.MoveTowards(transform.position, initialPos, openSpeed * Time.deltaTime * 10);
