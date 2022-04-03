@@ -143,5 +143,6 @@ MonoBehaviour:
   characterToFollow: {fileID: 0}
   lineRenderer: {fileID: 4354208718156233685}
   startFollowingCharacterOnStart: 1
-  amountOfPointsBeforeToSpawnFlame: 0
-  originalMeche: 0
+  amountOfPointsBeforeToSpawnFlame: 10
+  originalMeche: 1
+  burning: 0

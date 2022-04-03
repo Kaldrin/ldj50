@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JGDT.Audio.FadeInOut;
 using UnityEngine;
 
 public class Door : MonoBehaviour
@@ -10,6 +11,11 @@ public class Door : MonoBehaviour
     [SerializeField] Vector2 directionWhenOpening;
     Vector2 initialPos;
 
+
+    [Header("AUDIO")] [SerializeField] private AudioFade audioFade = null;
+    
+    
+    
     void OnEnable()
     {
         initialPos = transform.position;
@@ -20,10 +26,9 @@ public class Door : MonoBehaviour
     {
         //hiddenSwitchList = listOfSwitches;
         for (int i = 0; i < listOfSwitches.Count; i++)
-        {
             hiddenSwitchList.Add(listOfSwitches[i]);
-        }
-        transform.position = initialPos;
+        //transform.position = initialPos;
+        StartCoroutine(ResetPosition());
     }
 
     public void RemoveFromListOfSwitches(GameObject switchToRemove)
@@ -45,11 +50,24 @@ public class Door : MonoBehaviour
         else if (directionWhenOpening == Vector2.right)
             goal = new Vector2(transform.position.x + transform.localScale.x, transform.position.y);
 
+        
+        // AUDIO
+        if (audioFade)
+        {
+            audioFade.audioSource.Play();
+            audioFade.FadeIn();
+        }
+            
+        
         while (Vector2.Distance(transform.position, goal) != 0)
         {
             Vector2 pos = Vector2.MoveTowards(transform.position, goal, openSpeed * Time.deltaTime);
             transform.position = pos;
         }
+        
+        // AUDIO
+        if (audioFade)
+            audioFade.FadeOut();
     }
 
     IEnumerator Opening()
@@ -64,11 +82,36 @@ public class Door : MonoBehaviour
         else if (directionWhenOpening.x > 0)
             goal = new Vector2(transform.position.x + transform.localScale.x, transform.position.y);
 
+        
+        // AUDIO
+        if (audioFade)
+        {
+            audioFade.audioSource.Play();
+            audioFade.FadeIn();
+        }
+        
+        
         while (Vector2.Distance(transform.position, goal) != 0)
         {
             Vector2 pos = Vector2.MoveTowards(transform.position, goal + directionWhenOpening, openSpeed * Time.deltaTime);
             transform.position = pos;
             yield return null;
+        }
+        
+        // AUDIO
+        if (audioFade)
+            audioFade.FadeOut();
+    }
+
+
+
+    IEnumerator ResetPosition()
+    {
+        while (Vector2.Distance(transform.position, initialPos) != 0)
+        {
+            Vector2 pos = Vector2.MoveTowards(transform.position, initialPos, openSpeed * Time.deltaTime * 10);
+            transform.position = pos;
+            yield return new WaitForEndOfFrame();
         }
     }
 }
