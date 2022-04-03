@@ -33,6 +33,14 @@ public class Door : MonoBehaviour
         //transform.position = initialPos;
         reset = ResetPosition();
         StartCoroutine(reset);
+        
+        
+        // AUDIO
+        if (audioFade)
+            audioFade.FadeOut();
+        
+        
+        //StartCoroutine(ResetPosition());
     }
 
     public void RemoveFromListOfSwitches(GameObject switchToRemove)
