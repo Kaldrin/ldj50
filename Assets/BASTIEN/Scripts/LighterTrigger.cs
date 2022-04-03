@@ -17,6 +17,8 @@ public class LighterTrigger : MonoBehaviour
     void LightRopeAtArea()
     {
         CheckForAdjacentSection();
+        ropeToLight.burning = true;
+        Character.instance.faceAnimator.SetTrigger("Chocked");
         Destroy(GetComponent<Collider2D>());
     }
     
@@ -26,7 +28,7 @@ public class LighterTrigger : MonoBehaviour
         for (int i = 0; i < ropeToLight.lineRenderer.positionCount - 1; i++)
         {
             Vector3 position = ropeToLight.lineRenderer.GetPosition(i);
-            if (position.z <= 0.2f && Vector3.Distance(position, lightingArea.position) < 2)
+            if (position.z <= 0.2f && Vector3.Distance(position, lightingArea.position) < 1f)
             {
                 SpreadFire(i);
                 return;

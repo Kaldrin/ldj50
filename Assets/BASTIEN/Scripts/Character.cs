@@ -2,22 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.Serialization;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Character : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rigid2D = null;
+    [FormerlySerializedAs("characterAnimator")] [SerializeField] public Animator faceAnimator = null;
     [HideInInspector] public Vector2 receivedMovementVector = new Vector2(0f, 0f);
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
     public float speed = 3f;
-
+    
     public static Character instance;
 
     bool canSendInputs = true;
-
+    
 
 
     [Header("FX")]
@@ -106,7 +106,7 @@ public class Character : MonoBehaviour
         //transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
         //transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         //transform.GetChild(0)?.GetComponent<AudioSource>()?.Play();
-        GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(.8f, .5f);
+        GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(10f, 0.3f);
         Meche.instance.Reset();
         
         
