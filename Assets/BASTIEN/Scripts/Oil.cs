@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class Oil : MonoBehaviour
 {
-    private bool onFire = false;
+    public bool onFire = false;
     private float propagationStartTime = 0f;
     private bool canPropagate = false;
     [SerializeField] private float propagationCooldown = 1f;
 
-    [SerializeField] private GameObject oilPropagationAgentPrefab = null;
+    [SerializeField] private GameObject oilPropagationCollider = null;
     [SerializeField] private ParticleSystem fireFX = null;
+    [SerializeField] private GameObject playerColliderDetector = null;
+    [SerializeField] private Collider2D oildCollider = null;
 
 
     private void Update()
@@ -23,21 +25,29 @@ public class Oil : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Collisions");
-        // PLAYER
-        if (onFire && col.CompareTag("Player"))
-            col.transform.parent.GetComponent<Character>().Die();
-        // FLAME
-        else if (!col.CompareTag("Player") && !onFire)
+        // PROPAGATION
+        if (!onFire)
             SetOnFire(true);
     }
 
-    void SetOnFire(bool state)
+
+
+
+
+
+    public void Reset() => SetOnFire(false);
+    
+    
+    
+    
+    public void SetOnFire(bool state)
     {
         onFire = state;
+        playerColliderDetector.SetActive(state);
         if (state)
         {
             propagationStartTime = Time.time;
+            oildCollider.enabled = false;
             
             //FX
             if (fireFX)
@@ -45,6 +55,9 @@ public class Oil : MonoBehaviour
         }
         else
         {
+            oildCollider.enabled = true;
+            
+            // FX
             if (fireFX)
                 fireFX.Stop();
         }
@@ -59,7 +72,7 @@ public class Oil : MonoBehaviour
     {
         canPropagate = false;
         propagationStartTime = Time.time;
-        Instantiate(oilPropagationAgentPrefab).transform.position = transform.position;
+        oilPropagationCollider.SetActive(true);
     }
     #endregion
 }

@@ -80,5 +80,8 @@ public class Level : MonoBehaviour
         foreach (S_Switch switchs in FindObjectsOfType<S_Switch>())
             if (switchs)
                 switchs.Reset();
+        foreach (Oil oil in FindObjectsOfType<Oil>())
+            if (oil)
+                oil.Reset();
     }
 }
