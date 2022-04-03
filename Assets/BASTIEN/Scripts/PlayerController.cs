@@ -38,9 +38,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
     
-    
-    
-    
+
     #region SEND INPUT VALUES TO CHARACTER
     void SendCharacterMovements()
     {

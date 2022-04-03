@@ -48,6 +48,7 @@ public class Flame : MonoBehaviour
         if (startOnStart)
             Invoke("StartMoving", 3f);
             */
+        Character.instance.GetComponent<AudioSource>().Play();
     }
     public void StartMoving() => RestartMovingFromBeginning(0);
     private void Update() => UpdateMoving();

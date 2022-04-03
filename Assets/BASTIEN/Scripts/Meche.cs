@@ -56,7 +56,7 @@ public class Meche : MonoBehaviour
 
 
     #region FOLLOW
-    void SetFollowPlayer(bool state)
+    public void SetFollowPlayer(bool state)
     {
         if (state)
         {

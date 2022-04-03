@@ -10,9 +10,21 @@ public class Character : MonoBehaviour
     [HideInInspector] public Vector2 receivedMovementVector = new Vector2(0f, 0f);
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
     public float speed = 3f;
-    [SerializeField] AudioClip explosionSound;
 
     public static Character instance;
+
+    bool canSendInputs = true;
+
+    void StopMoving()
+    {
+        canSendInputs = false;
+        rigid2D.velocity = Vector2.zero;
+    }
+
+    public void GetControlsBack()
+    {
+        canSendInputs = true;
+    }
 
 
     private void FixedUpdate() => ManagementMovements();
@@ -25,9 +37,12 @@ public class Character : MonoBehaviour
     void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed * Time.deltaTime;
     void ManagementMovements()
     {
-        CalculateMovement();
-        if (rigid2D)
-            rigid2D.velocity = actualMovementVector;
+        if (canSendInputs)
+        {
+            CalculateMovement();
+            if (rigid2D)
+                rigid2D.velocity = actualMovementVector;
+        }
     }
     #endregion
 
@@ -50,18 +65,18 @@ public class Character : MonoBehaviour
     #region DIE
     public void Die()
     {
-        GetComponent<PlayerController>().enabled = false;
         // Play animation / Make Sound etc
         StartCoroutine(Explode());
     }
 
     IEnumerator Explode()
     {
+        StopMoving();
         transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
         transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
         transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
-        GetComponent<AudioSource>().PlayOneShot(explosionSound);
+        transform.GetChild(0).GetComponent<AudioSource>().Play();
         GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(.8f, .5f);
         Meche.instance.Reset();
         yield return new WaitForSeconds(1f);

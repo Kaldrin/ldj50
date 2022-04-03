@@ -58,9 +58,10 @@ public class Level : MonoBehaviour
 
     IEnumerator WaitBeforeRestart()
     {
-        yield return new WaitForSeconds(1);
-        Character.instance.GetComponent<PlayerController>().enabled = true;
         Meche.instance.Reset();
+        yield return new WaitForSeconds(1);
+        Character.instance.GetControlsBack();
+        Meche.instance.SetFollowPlayer(true);
         //Instantiate(GameManager.instance.flame);
     }
 }
