@@ -83,5 +83,8 @@ public class Level : MonoBehaviour
         foreach (Oil oil in FindObjectsOfType<Oil>())
             if (oil)
                 oil.Reset();
+        foreach(HiddenDoorTimer hiddenDoorTimer in FindObjectsOfType<HiddenDoorTimer>())
+            if(hiddenDoorTimer)
+                hiddenDoorTimer.Reset();
     }
 }
