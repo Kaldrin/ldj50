@@ -14,6 +14,7 @@ public class Oil : MonoBehaviour
     [SerializeField] private ParticleSystem fireFX = null;
     [SerializeField] private GameObject playerColliderDetector = null;
     [SerializeField] private Collider2D oildCollider = null;
+    [SerializeField] private LayerMask propagationMask = new LayerMask();
 
 
     private void Update()
@@ -73,7 +74,12 @@ public class Oil : MonoBehaviour
     {
         canPropagate = false;
         propagationStartTime = Time.time;
-        oilPropagationCollider.SetActive(true);
+        //oilPropagationCollider.SetActive(true);
+
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1.5f, propagationMask);
+        foreach (Collider2D col in cols)
+            if (col && col.GetComponent<Oil>() && !col.GetComponent<Oil>().onFire)
+                col.GetComponent<Oil>().SetOnFire(true);
     }
     #endregion
 }
