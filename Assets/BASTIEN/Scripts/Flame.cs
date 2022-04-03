@@ -63,8 +63,7 @@ public class Flame : MonoBehaviour
         }
         else if (moving && col.CompareTag("Player"))
         {
-            col.transform.parent.GetComponent<AudioSource>().Stop();
-            col.transform.parent.GetComponent<Character>().Die();
+            
             TouchPlayer();
         }
     }
@@ -233,7 +232,12 @@ public class Flame : MonoBehaviour
 
 
 
-    void TouchPlayer() => Die();
+    void TouchPlayer()
+    {
+        Character.instance.Die();
+        //col.transform.parent.GetComponent<AudioSource>().Stop();
+        Die();
+    }
 
     void Die()
     {
