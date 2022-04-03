@@ -29,6 +29,13 @@ public class Door : MonoBehaviour
         for (int i = 0; i < listOfSwitches.Count; i++)
             hiddenSwitchList.Add(listOfSwitches[i]);
         //transform.position = initialPos;
+        
+        
+        // AUDIO
+        if (audioFade)
+            audioFade.FadeOut();
+        
+        
         StartCoroutine(ResetPosition());
     }
 
