@@ -7,7 +7,7 @@ using UnityEngine;
 public class Meche : MonoBehaviour
 {
     [SerializeField] Transform characterToFollow = null;
-    [SerializeField] private LineRenderer lineRenderer = null;
+    [SerializeField] public LineRenderer lineRenderer = null;
     [SerializeField] private bool startFollowingCharacterOnStart = false;
     private float distanceToCreateNewPoint = 0.5f;
     private bool followingCharacter = false;
