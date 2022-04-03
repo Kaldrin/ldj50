@@ -20,16 +20,27 @@ public class Door : MonoBehaviour
 
 
 
-    void OnEnable()
+    void Awake()
     {
+        //hiddenSwitchList = listOfSwitches;
         initialPos = transform.position;
         Reset();
+    }
+
+    void OnEnable()
+    {
+        
+
+        
+        
+        
+        //Reset();
     }
 
     public void Reset()
     {
         //hiddenSwitchList = listOfSwitches;
-        listOfSwitches.Clear();
+        hiddenSwitchList.Clear();
         for (int i = 0; i < listOfSwitches.Count; i++)
             hiddenSwitchList.Add(listOfSwitches[i]);
         //transform.position = initialPos;
