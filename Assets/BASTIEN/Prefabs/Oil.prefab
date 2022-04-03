@@ -58,7 +58,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 4.76, y: 1}
+  m_Size: {x: 0.8, y: 0.8}
   m_Direction: 0
 --- !u!1 &342409398484810013
 GameObject:
@@ -86,7 +86,7 @@ Transform:
   m_GameObject: {fileID: 342409398484810013}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.63965, y: 0.63965, z: 0.63965}
+  m_LocalScale: {x: 0.1273799, y: 0.1273799, z: 0.1273799}
   m_Children: []
   m_Father: {fileID: 342409399759160522}
   m_RootOrder: 0
@@ -189,7 +189,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 7.55
+  m_Radius: 1.55
 --- !u!114 &342409399384813212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +229,7 @@ Transform:
   m_GameObject: {fileID: 342409399551289304}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4114431, y: 1.4114431, z: 1.4114431}
+  m_LocalScale: {x: 0.92308885, y: 0.92308885, z: 0.92308885}
   m_Children: []
   m_Father: {fileID: 342409399961817604}
   m_RootOrder: 0
@@ -5027,6 +5027,7 @@ GameObject:
   - component: {fileID: 342409399759160523}
   - component: {fileID: 342409399759160520}
   - component: {fileID: 342409399759160521}
+  - component: {fileID: 3089822560123888713}
   m_Layer: 11
   m_Name: Oil
   m_TagString: Untagged
@@ -5043,7 +5044,7 @@ Transform:
   m_GameObject: {fileID: 342409399759160525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.64, y: 2.67, z: 0}
-  m_LocalScale: {x: 0.30969, y: 0.30969, z: 0.30969}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 342409398484810010}
   - {fileID: 342409399961817604}
@@ -5084,7 +5085,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 5.76, y: 1}
+  m_Size: {x: 1, y: 1}
   m_Direction: 0
 --- !u!50 &342409399759160521
 Rigidbody2D:
@@ -5107,6 +5108,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3089822560123888713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342409399759160525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc9bec95120cc84db66eb5b6729360a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &342409399961817607
 GameObject:
   m_ObjectHideFlags: 0
@@ -5134,7 +5147,7 @@ Transform:
   m_GameObject: {fileID: 342409399961817607}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.0905423, y: 2.0905423, z: 2.0905423}
+  m_LocalScale: {x: 1.5443276, y: 1.5443276, z: 1.5443276}
   m_Children:
   - {fileID: 342409399551289305}
   m_Father: {fileID: 342409399759160522}
@@ -5392,7 +5405,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.7
+      scalar: 0.5
       minScalar: 0
       maxCurve:
         serializedVersion: 2
