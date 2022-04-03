@@ -16,7 +16,7 @@ public class Flame : MonoBehaviour
     [SerializeField] private float spawnPropagationCooldown = 1f;
     
     private float propagationStartTime = 0f;
-    private bool standing = true;
+    [HideInInspector] public  bool standing = true;
 
 
 
