@@ -56,6 +56,7 @@ public class Oil : MonoBehaviour
         else
         {
             oildCollider.enabled = true;
+            oilPropagationCollider.SetActive(false);
             
             // FX
             if (fireFX)

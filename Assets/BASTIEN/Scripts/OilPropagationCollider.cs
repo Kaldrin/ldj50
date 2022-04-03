@@ -12,4 +12,16 @@ public class OilPropagationCollider : MonoBehaviour
         if (col.GetComponent<Oil>() && !col.GetComponent<Oil>().onFire)
             col.GetComponent<Oil>().SetOnFire(true);
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.GetComponent<Oil>() && !other.GetComponent<Oil>().onFire)
+            other.GetComponent<Oil>().SetOnFire(true);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.GetComponent<Oil>() && !other.GetComponent<Oil>().onFire)
+            other.GetComponent<Oil>().SetOnFire(true);
+    }
 }
