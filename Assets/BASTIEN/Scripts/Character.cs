@@ -63,6 +63,7 @@ public class Character : MonoBehaviour
         transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         GetComponent<AudioSource>().PlayOneShot(explosionSound);
         GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(.8f, .5f);
+        Meche.instance.Reset();
         yield return new WaitForSeconds(1f);
         GameManager.instance.currentLevel.GetComponent<Level>().RestartLevel();
         transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;

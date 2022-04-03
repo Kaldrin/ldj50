@@ -46,6 +46,7 @@ public class Level : MonoBehaviour
         actionsAtStart?.Invoke();
         gameObject.SetActive(true);
         GameManager.instance.currentLevel = gameObject;
+        
         // Reset Flame State
     }
 
@@ -59,6 +60,7 @@ public class Level : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         Character.instance.GetComponent<PlayerController>().enabled = true;
-        GameManager.instance.flame.GetComponent<Flame>().StartMoving();
+        Meche.instance.Reset();
+        //Instantiate(GameManager.instance.flame);
     }
 }
