@@ -58,7 +58,6 @@ public class Flame : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("truc");
         if (!moving && col.CompareTag("Player"))
         {
             standing = false;
@@ -67,8 +66,13 @@ public class Flame : MonoBehaviour
         }
         else if (moving && col.CompareTag("Player"))
             TouchPlayer();
+        // OIL
         else if (moving && col.GetComponent<Oil>() && !col.GetComponent<Oil>().onFire)
             col.GetComponent<Oil>().SetOnFire(true);
+        // TORCH
+        else if (moving && col.transform.parent.GetComponent<Torch>() && !col.transform.parent.GetComponent<Torch>().onFire)
+            col.transform.parent.GetComponent<Torch>().SetOnFire(true);
+        
     }
 
 

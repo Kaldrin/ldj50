@@ -86,5 +86,8 @@ public class Level : MonoBehaviour
         foreach(HiddenDoorTimer hiddenDoorTimer in FindObjectsOfType<HiddenDoorTimer>())
             if(hiddenDoorTimer)
                 hiddenDoorTimer.Reset();
+        foreach(Torch torch in FindObjectsOfType<Torch>())
+            if (torch)
+                torch.Reset();
     }
 }

@@ -78,8 +78,13 @@ public class Oil : MonoBehaviour
 
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1.5f, propagationMask);
         foreach (Collider2D col in cols)
-            if (col && col.GetComponent<Oil>() && !col.GetComponent<Oil>().onFire)
-                col.GetComponent<Oil>().SetOnFire(true);
+            if (col)
+            {
+                if (col.GetComponent<Oil>() && !col.GetComponent<Oil>().onFire)
+                    col.GetComponent<Oil>().SetOnFire(true);
+                if (col.GetComponent<Torch>() && !col.GetComponent<Torch>().onFire)
+                    col.GetComponent<Torch>().SetOnFire(true);
+            }
     }
     #endregion
 }
