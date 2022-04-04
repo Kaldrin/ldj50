@@ -89,5 +89,11 @@ public class Level : MonoBehaviour
         foreach(Torch torch in FindObjectsOfType<Torch>())
             if (torch)
                 torch.Reset();
+        foreach(CameraConfinerManager confinerManager in FindObjectsOfType<CameraConfinerManager>())
+            if(confinerManager)
+                confinerManager.Reset();
+        foreach(HiddenCollisionTrigger collisionTrigger in FindObjectsOfType<HiddenCollisionTrigger>())
+            if(collisionTrigger)
+                collisionTrigger.Reset();
     }
 }

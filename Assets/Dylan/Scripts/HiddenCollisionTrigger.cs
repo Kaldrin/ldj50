@@ -6,21 +6,20 @@ using UnityEngine.Events;
 public class HiddenCollisionTrigger : MonoBehaviour
 {
     [SerializeField] UnityEvent actionToCallOnTriggerEnter;
+    Collider2D col;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private void Start() {
+        col = GetComponent<Collider2D>();
     }
-
-    // Update is called once per frame
-    void Update()
+    public void Reset()
     {
-        
+        col.enabled = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        col = GetComponent<Collider2D>();
         if(other.gameObject.CompareTag("Player"))
             actionToCallOnTriggerEnter?.Invoke();
+        col.enabled = false;
     }
 }
