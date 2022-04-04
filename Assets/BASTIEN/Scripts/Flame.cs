@@ -58,6 +58,9 @@ public class Flame : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        if (col.name == "water")
+            Die();
+        
         if (!moving && col.CompareTag("Player"))
         {
             standing = false;
@@ -72,7 +75,6 @@ public class Flame : MonoBehaviour
         // TORCH
         else if (moving && col.transform.parent.GetComponent<Torch>() && !col.transform.parent.GetComponent<Torch>().onFire)
             col.transform.parent.GetComponent<Torch>().SetOnFire(true);
-        
     }
 
 

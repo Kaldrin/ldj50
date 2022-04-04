@@ -19,6 +19,8 @@ public class Torch : MonoBehaviour
     [SerializeField] private ParticleSystem fireDeadFX = null;
     private Vector3 baseFXScale = new Vector3(0, 0, 0);
 
+    [SerializeField] private AudioSource lightSFX = null;
+
 
     private void Awake() => baseFXScale = fireFX.transform.localScale;
     
@@ -61,6 +63,10 @@ public class Torch : MonoBehaviour
                 fireFX.Play();
             if (fireOnFX)
                 fireOnFX.Play();
+            
+            // AUDIO
+            if (lightSFX)
+                lightSFX.Play();
             
             fireFX.transform.localScale = baseFXScale;
         }
