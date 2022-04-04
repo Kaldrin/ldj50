@@ -63,12 +63,23 @@ public class Door : MonoBehaviour
 
     public void RemoveFromListOfSwitches(GameObject switchToRemove)
     {
-        hiddenSwitchList.Remove(switchToRemove);
+        Debug.Log(listOfSwitches.Contains(switchToRemove));
+        if (hiddenSwitchList.Contains(switchToRemove))
+            hiddenSwitchList.Remove(switchToRemove);
+        else if (listOfSwitches.Contains(switchToRemove))
+            hiddenSwitchList.Add((switchToRemove));
 
+
+        Debug.Log(hiddenSwitchList.Count);
         if (hiddenSwitchList.Count == 0)
         {
             open = Opening();
             StartCoroutine(open);
+        }
+        else
+        {
+            Debug.Log("Reset");
+            StartCoroutine(ResetPosition());
         }
     }
 
