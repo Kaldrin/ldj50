@@ -8,6 +8,7 @@ public class LighterTrigger : MonoBehaviour
     [SerializeField] private Meche ropeToLight = null;
     [SerializeField] private Transform lightingArea = null;
     [SerializeField] private GameObject firePrefab = null;
+    [SerializeField] private AudioSource lightSFX = null;
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
@@ -18,6 +19,8 @@ public class LighterTrigger : MonoBehaviour
     {
         CheckForAdjacentSection();
         ropeToLight.burning = true;
+        if (lightSFX)
+            lightSFX.Play();
         Character.instance.faceAnimator.SetTrigger("Chocked");
         Destroy(GetComponent<Collider2D>());
     }
