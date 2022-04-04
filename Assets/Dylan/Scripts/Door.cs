@@ -70,7 +70,6 @@ public class Door : MonoBehaviour
             hiddenSwitchList.Add((switchToRemove));
 
 
-        Debug.Log(hiddenSwitchList.Count);
         if (hiddenSwitchList.Count == 0)
         {
             open = Opening();

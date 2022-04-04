@@ -9,6 +9,7 @@ public class Oil : MonoBehaviour
     private float propagationStartTime = 0f;
     private bool canPropagate = false;
     [SerializeField] private float propagationCooldown = 1f;
+    [SerializeField] private float propagationRadius = 1.5f;
 
     [SerializeField] private GameObject oilPropagationCollider = null;
     [SerializeField] private ParticleSystem fireFX = null;
@@ -76,7 +77,7 @@ public class Oil : MonoBehaviour
         propagationStartTime = Time.time;
         //oilPropagationCollider.SetActive(true);
 
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1.5f, propagationMask);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, propagationRadius, propagationMask);
         foreach (Collider2D col in cols)
             if (col)
             {
