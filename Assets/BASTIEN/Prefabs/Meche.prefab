@@ -145,4 +145,4 @@ MonoBehaviour:
   startFollowingCharacterOnStart: 1
   amountOfPointsBeforeToSpawnFlame: 10
   originalMeche: 1
-  burning: 0
+  burning: 1
