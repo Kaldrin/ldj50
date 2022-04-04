@@ -179,6 +179,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 342409399759160523, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
+      propertyPath: propagationRadius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 342409399759160523, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
       propertyPath: propagationCooldown
       value: 0.5
       objectReference: {fileID: 0}
