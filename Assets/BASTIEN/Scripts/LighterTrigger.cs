@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JGDT.Audio.FadeInOut;
 using UnityEngine;
 
 public class LighterTrigger : MonoBehaviour
@@ -9,6 +10,9 @@ public class LighterTrigger : MonoBehaviour
     [SerializeField] private Transform lightingArea = null;
     [SerializeField] private GameObject firePrefab = null;
     [SerializeField] private AudioSource lightSFX = null;
+
+    [SerializeField] private AudioFade ambianceAudioFade = null;
+    
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
@@ -19,6 +23,8 @@ public class LighterTrigger : MonoBehaviour
     {
         CheckForAdjacentSection();
         ropeToLight.burning = true;
+        if (ambianceAudioFade)
+            ambianceAudioFade.FadeOut();
         if (lightSFX)
             lightSFX.Play();
         Character.instance.faceAnimator.SetTrigger("Chocked");

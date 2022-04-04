@@ -63,7 +63,6 @@ public class Door : MonoBehaviour
 
     public void RemoveFromListOfSwitches(GameObject switchToRemove)
     {
-        Debug.Log(listOfSwitches.Contains(switchToRemove));
         if (hiddenSwitchList.Contains(switchToRemove))
             hiddenSwitchList.Remove(switchToRemove);
         else if (listOfSwitches.Contains(switchToRemove))

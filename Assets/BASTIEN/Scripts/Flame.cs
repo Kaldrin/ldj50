@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JGDT.Audio.FadeInOut;
 using UnityEngine;
 
 public class Flame : MonoBehaviour
@@ -59,8 +60,18 @@ public class Flame : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.name == "water")
+        {
+            /*
+            AudioFade ambiance = GameObject.Find("Ambiance").GetComponent<AudioFade>();
+            if (!ambiance.audioSource.isPlaying)
+                ambiance.audioSource.Play();
+                
+            ambiance.FadeIn();
+            */
             Die();
-        
+        }
+
+
         if (!moving && col.CompareTag("Player"))
         {
             standing = false;
