@@ -11,12 +11,13 @@ public class ArrowSpawner : MonoBehaviour
     [SerializeField] float timeBeetweenTwoShots;
     [SerializeField] bool triggeredAtStart;
     [SerializeField] float lifeTime;
+    [SerializeField] float timeBeforeStart;
 
     // Start is called before the first frame update
     void Start()
     {
         if (triggeredAtStart)
-            Trigger();
+            Invoke("Trigger", timeBeforeStart);
     }
 
     // Update is called once per frame
