@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/BASTIEN/Scenes/BASTIEN_SCENE.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/BASTIEN/Scenes/SAFE_SCENE.unity
+    guid: d170e50e6c5f32c4aa9b59e2f9e1bd5f
   m_configObjects: {}
