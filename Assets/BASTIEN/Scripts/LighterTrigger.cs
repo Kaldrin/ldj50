@@ -12,6 +12,7 @@ public class LighterTrigger : MonoBehaviour
     [SerializeField] private AudioSource lightSFX = null;
 
     [SerializeField] private AudioFade ambianceAudioFade = null;
+    [SerializeField] private AudioFade music = null;
     
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -25,10 +26,17 @@ public class LighterTrigger : MonoBehaviour
         ropeToLight.burning = true;
         if (ambianceAudioFade)
             ambianceAudioFade.FadeOut();
+        Invoke("TriggerMusic", 1.2f);
         if (lightSFX)
             lightSFX.Play();
         Character.instance.faceAnimator.SetTrigger("Chocked");
         Destroy(GetComponent<Collider2D>());
+    }
+
+    void TriggerMusic()
+    {
+        if (music)
+            music.audioSource.Play();
     }
     
     

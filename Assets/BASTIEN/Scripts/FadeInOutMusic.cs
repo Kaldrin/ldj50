@@ -7,11 +7,13 @@ using UnityEngine;
 public class FadeInOutMusic : MonoBehaviour
 {
     [SerializeField] private AudioFade ambiance = null;
+    [SerializeField] private AudioFade music = null;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("truc");
         if (ambiance)
             ambiance.FadeIn();
+        if (music)
+            music.FadeOut();
     }
 }
