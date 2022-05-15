@@ -6,6 +6,7 @@ Shader "Unlit/ScrollingWorldAlignedText"
         _Tiling ("Tiling", Vector) = (1, 1, 1, 1)
         _Speed ("Speed", Vector) = (1, 1, 1, 1)
         _Color("Color", Color) = (1, 1, 1, 1)
+        _Scale("Scale", Range(0.5, 2)) = 1
     }
     SubShader
     {
@@ -46,6 +47,7 @@ Shader "Unlit/ScrollingWorldAlignedText"
                 float4 _Tiling;
                 float4 _Speed;
                 float4 _Color;
+                float _Scale;
 
                 v2f vert (appdata v)
                 {
@@ -58,7 +60,7 @@ Shader "Unlit/ScrollingWorldAlignedText"
                 fixed4 frag (v2f i) : SV_Target
                 {
                     // sample the texture
-                    fixed4 col = tex2D(_MainTex, i.worldPos.xy + _Time.y * _Speed.xy);
+                    fixed4 col = tex2D(_MainTex, i.worldPos.xy * (1 / _Scale) + _Time.y * _Speed.xy);
                     //col *= _Color;
                     //clip(frac(i.worldPos.y + _Time.y * _Speed.y) - 0.5);
                     clip(col.a - 0.2);
