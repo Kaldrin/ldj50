@@ -26,6 +26,7 @@ public class Flame : MonoBehaviour
     private float currentSectionRanDistance = 0f;
     private Vector3 currentPointPos = new Vector3(0f, 0f, 0f);
     private Vector3 nextpoinsPos = new Vector3(0f, 0f, 0f);
+    public bool moving = false;
 
 
     [Header("FX")]
@@ -38,7 +39,6 @@ public class Flame : MonoBehaviour
 
 
     [Header("READ ONLY")]
-    [SerializeField] private bool moving = false;
     [SerializeField] private int currentSectionIndex = 0;
 
 

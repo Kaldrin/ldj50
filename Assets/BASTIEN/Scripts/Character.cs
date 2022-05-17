@@ -16,7 +16,7 @@ public class Character : MonoBehaviour
     
     public static Character instance;
 
-    bool canSendInputs = true;
+    public bool canSendInputs = true;
     
 
 
@@ -39,7 +39,7 @@ public class Character : MonoBehaviour
     
     
     
-    void StopMoving()
+    public void StopMoving()
     {
         canSendInputs = false;
         rigid2D.velocity = Vector2.zero;
@@ -61,6 +61,13 @@ public class Character : MonoBehaviour
             if (rigid2D)
                 rigid2D.velocity = actualMovementVector;
         }
+    }
+    #endregion
+
+    #region Pause
+    public void PressEscape()
+    {
+        PauseMenu.instance.PressEscape();
     }
     #endregion
 

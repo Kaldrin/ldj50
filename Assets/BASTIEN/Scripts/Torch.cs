@@ -9,10 +9,11 @@ using UnityEngine.Events;
 public class Torch : MonoBehaviour
 {
     [HideInInspector] public bool onFire = false;
+    [HideInInspector] public bool unconsume;
     public UnityEvent action;
     [SerializeField] private float duration = 2f;
     private float timer = 0f;
-    
+
     [Header("FX")]
     [SerializeField] private ParticleSystem fireFX = null;
     [SerializeField] private ParticleSystem fireOnFX = null;
@@ -23,51 +24,54 @@ public class Torch : MonoBehaviour
 
 
     private void Awake() => baseFXScale = fireFX.transform.localScale;
-    
-    
-    
+
+
+
     private void Update()
     {
         if (onFire)
         {
-            timer -= Time.deltaTime;
-
-            if (timer <= 0)
+            if (!unconsume)
             {
-                SetOnFire(false);
-                action.Invoke();
-                if (fireDeadFX)
-                    fireDeadFX.Play();
+                timer -= Time.deltaTime;
+
+                if (timer <= 0)
+                {
+                    SetOnFire(false);
+                    action.Invoke();
+                    if (fireDeadFX)
+                        fireDeadFX.Play();
+                }
+                else
+                    fireFX.transform.localScale = baseFXScale * (timer / duration);
             }
-            else
-                fireFX.transform.localScale = baseFXScale * (timer / duration);
         }
     }
-    
-    
+
+
 
     public void Reset()
     {
         if (onFire)
             SetOnFire(false);
     }
-    
+
     public void SetOnFire(bool state)
     {
         if (state)
         {
             action.Invoke();
-            
+
             // FX
             if (fireFX)
                 fireFX.Play();
             if (fireOnFX)
                 fireOnFX.Play();
-            
+
             // AUDIO
             if (lightSFX)
                 lightSFX.Play();
-            
+
             fireFX.transform.localScale = baseFXScale;
         }
         else
@@ -76,8 +80,8 @@ public class Torch : MonoBehaviour
             if (fireFX)
                 fireFX.Stop();
         }
-        
-        
+
+
         onFire = state;
         timer = duration;
     }

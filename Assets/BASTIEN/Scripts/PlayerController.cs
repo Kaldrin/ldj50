@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     {
         xValue = Input.GetAxis(horizontal);
         yValue = Input.GetAxis(vertical);
+
+        if(Input.GetButtonDown("Cancel")) characterToControl.PressEscape();
     }
     #endregion
     

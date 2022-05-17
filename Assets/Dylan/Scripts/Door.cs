@@ -12,6 +12,8 @@ public class Door : MonoBehaviour
     Vector2 initialPos;
     IEnumerator reset;
     IEnumerator open;
+    [HideInInspector] public bool stopMoving = false;
+    Vector2 goal;
 
     [Header("FX")]
     [SerializeField] private ParticleSystem dustFX = null;
@@ -29,21 +31,19 @@ public class Door : MonoBehaviour
 
     void OnEnable()
     {
-        
 
-        
-        
-        
+
+
+
+
         //Reset();
     }
 
     public void Reset()
     {
-        //hiddenSwitchList = listOfSwitches;
         hiddenSwitchList.Clear();
         for (int i = 0; i < listOfSwitches.Count; i++)
             hiddenSwitchList.Add(listOfSwitches[i]);
-        //transform.position = initialPos;
         reset = ResetPosition();
         StartCoroutine(reset);
 
@@ -56,9 +56,6 @@ public class Door : MonoBehaviour
         // FX
         if (dustFX)
             dustFX.Stop();
-
-
-        //StartCoroutine(ResetPosition());
     }
 
     public void RemoveFromListOfSwitches(GameObject switchToRemove)
@@ -76,8 +73,22 @@ public class Door : MonoBehaviour
         }
         else
         {
-            Debug.Log("Reset");
             StartCoroutine(ResetPosition());
+        }
+    }
+
+    public void StopMoving()
+    {
+        if (open != null)
+            StopCoroutine(open);
+    }
+
+    public void MoveBack()
+    {
+        if (open != null)
+        {
+            open = Opening(false);
+            StartCoroutine(open);
         }
     }
 
@@ -109,6 +120,7 @@ public class Door : MonoBehaviour
         }
         transform.position = goal;
 
+
         // AUDIO
         if (audioFade)
             audioFade.FadeOut();
@@ -118,20 +130,26 @@ public class Door : MonoBehaviour
             dustFX.Stop();
     }
 
-    IEnumerator Opening()
+    IEnumerator Opening(bool fromStart = true)
     {
-        StopCoroutine(reset);
+        if (reset != null)
+        {
+            StopCoroutine(reset);
+            reset = null;
+        }
 
-        Vector2 goal = Vector2.zero;
-        if (directionWhenOpening.y > 0)
-            goal = new Vector2(transform.position.x, transform.position.y + transform.localScale.y * directionWhenOpening.y);
-        else if (directionWhenOpening.y < 0)
-            goal = new Vector2(transform.position.x, transform.position.y - transform.localScale.y * -directionWhenOpening.y);
-        else if (directionWhenOpening.x < 0)
-            goal = new Vector2(transform.position.x - transform.localScale.x * -directionWhenOpening.x, transform.position.y);
-        else if (directionWhenOpening.x > 0)
-            goal = new Vector2(transform.position.x + transform.localScale.x * directionWhenOpening.x, transform.position.y);
-
+        if (fromStart)
+        {
+            goal = Vector2.zero;
+            if (directionWhenOpening.y > 0)
+                goal = new Vector2(transform.position.x, transform.position.y + transform.localScale.y * directionWhenOpening.y);
+            else if (directionWhenOpening.y < 0)
+                goal = new Vector2(transform.position.x, transform.position.y - transform.localScale.y * -directionWhenOpening.y);
+            else if (directionWhenOpening.x < 0)
+                goal = new Vector2(transform.position.x - transform.localScale.x * -directionWhenOpening.x, transform.position.y);
+            else if (directionWhenOpening.x > 0)
+                goal = new Vector2(transform.position.x + transform.localScale.x * directionWhenOpening.x, transform.position.y);
+        }
 
 
         // AUDIO
@@ -154,6 +172,7 @@ public class Door : MonoBehaviour
         }
         transform.position = goal;
 
+
         // AUDIO
         if (audioFade)
             audioFade.FadeOut();
@@ -168,12 +187,16 @@ public class Door : MonoBehaviour
     IEnumerator ResetPosition()
     {
         if (open != null)
-            StopCoroutine(open);
-        while (Vector2.Distance(transform.position, initialPos) != 0)
         {
-            Vector2 pos = Vector2.MoveTowards(transform.position, initialPos, openSpeed * Time.deltaTime * 10);
-            transform.position = pos;
-            yield return new WaitForEndOfFrame();
+            StopCoroutine(open);
+            while (Vector2.Distance(transform.position, initialPos) != 0)
+            {
+                Vector2 pos = Vector2.MoveTowards(transform.position, initialPos, openSpeed * Time.deltaTime * 10);
+                transform.position = pos;
+                yield return new WaitForEndOfFrame();
+            }
+
+            open = null;
         }
     }
 }
