@@ -83,4 +83,9 @@ public class PauseMenu : MonoBehaviour
         }*/
         active = false;
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
