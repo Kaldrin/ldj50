@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     public static PauseMenu instance;
     bool active = false;
+    [SerializeField] AudioMixer audioMixer;
 
     // Start is called before the first frame update
     void Awake()
@@ -16,31 +20,31 @@ public class PauseMenu : MonoBehaviour
 
     public void PressEscape()
     {
-        if(active) Unpause();
+        if (active) Unpause();
         else Pause();
     }
-    
+
     void Pause()
     {
         transform.GetChild(0).gameObject.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(transform.GetChild(0).GetChild(2).gameObject);
+        EventSystem.current.SetSelectedGameObject(transform.GetChild(0).GetChild(1).GetChild(1).gameObject);
         Flame[] flames = GameObject.FindObjectsOfType<Flame>();
-        for(int i = 0; i < flames.Length; i++)
+        for (int i = 0; i < flames.Length; i++)
         {
             flames[i].moving = false;
         }
         Torch[] torches = GameObject.FindObjectsOfType<Torch>();
-        for(int i = 0; i < torches.Length; i++)
+        for (int i = 0; i < torches.Length; i++)
         {
             torches[i].unconsume = true;
         }
         Door[] doors = GameObject.FindObjectsOfType<Door>();
-        for(int i = 0; i < doors.Length; i++)
+        for (int i = 0; i < doors.Length; i++)
         {
             doors[i].StopMoving();
         }
         Character[] characters = GameObject.FindObjectsOfType<Character>();
-        for(int i = 0; i < characters.Length; i++)
+        for (int i = 0; i < characters.Length; i++)
         {
             characters[i].StopMoving();
         }
@@ -57,22 +61,22 @@ public class PauseMenu : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
         Character[] characters = GameObject.FindObjectsOfType<Character>();
-        for(int i = 0; i < characters.Length; i++)
+        for (int i = 0; i < characters.Length; i++)
         {
             characters[i].GetControlsBack();
         }
         Flame[] flames = GameObject.FindObjectsOfType<Flame>();
-        for(int i = 0; i < flames.Length; i++)
+        for (int i = 0; i < flames.Length; i++)
         {
             flames[i].moving = true;
         }
         Torch[] torches = GameObject.FindObjectsOfType<Torch>();
-        for(int i = 0; i < torches.Length; i++)
+        for (int i = 0; i < torches.Length; i++)
         {
             torches[i].unconsume = false;
         }
         Door[] doors = GameObject.FindObjectsOfType<Door>();
-        for(int i = 0; i < doors.Length; i++)
+        for (int i = 0; i < doors.Length; i++)
         {
             doors[i].MoveBack();
         }
@@ -82,6 +86,35 @@ public class PauseMenu : MonoBehaviour
             animators[i].speed = 1;
         }*/
         active = false;
+    }
+
+    public void OpenOptionsMenu()
+    {
+        transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(transform.GetChild(0).GetChild(2).GetChild(2).gameObject);
+    }
+
+    public void SetVolume(float sliderValue)
+    {
+        Debug.Log(sliderValue);
+        audioMixer.SetFloat("MasterVolume", Mathf.Log10(sliderValue) * 20);
+    }
+
+    private void Start() {
+        //SetVolume(.2f);
+    }
+
+    public void OpenMainPauseMenu()
+    {
+        transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
+        transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(transform.GetChild(0).GetChild(1).GetChild(1).gameObject);
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void Quit()
