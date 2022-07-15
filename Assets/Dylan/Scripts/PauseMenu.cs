@@ -9,9 +9,9 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     public static PauseMenu instance;
-    public Slider mainSlider;
     bool active = false;
     [SerializeField] AudioMixer audioMixer;
+    [SerializeField] Slider mainSlider;
 
     // Start is called before the first frame update
     void Awake()
@@ -101,15 +101,15 @@ public class PauseMenu : MonoBehaviour
         Debug.Log(sliderValue);
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(sliderValue) * 20);
     }
+
+    private void Start() {
+        //SetVolume(.2f);
+        mainSlider.onValueChanged.AddListener(delegate {ValueChangeCheck(); });
+    }
+
     public void ValueChangeCheck()
     {
-        Debug.Log(mainSlider.value);
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(mainSlider.value) * 20);
-    }
-    private void Start()
-    {
-        //SetVolume(.2f);
-        mainSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 
     public void OpenMainPauseMenu()
