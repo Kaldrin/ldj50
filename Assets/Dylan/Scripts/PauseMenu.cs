@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     public static PauseMenu instance;
+    public Slider mainSlider;
     bool active = false;
     [SerializeField] AudioMixer audioMixer;
 
@@ -100,9 +101,15 @@ public class PauseMenu : MonoBehaviour
         Debug.Log(sliderValue);
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(sliderValue) * 20);
     }
-
-    private void Start() {
+    public void ValueChangeCheck()
+    {
+        Debug.Log(mainSlider.value);
+        audioMixer.SetFloat("MasterVolume", Mathf.Log10(mainSlider.value) * 20);
+    }
+    private void Start()
+    {
         //SetVolume(.2f);
+        mainSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 
     public void OpenMainPauseMenu()
