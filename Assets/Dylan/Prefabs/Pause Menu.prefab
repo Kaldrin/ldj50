@@ -1862,8 +1862,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70652ec7abc95d94d900fabfdf9b31bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainSlider: {fileID: 0}
   audioMixer: {fileID: 0}
-  volumeSlider: {fileID: 0}
 --- !u!1 &7178240462294465113
 GameObject:
   m_ObjectHideFlags: 0
