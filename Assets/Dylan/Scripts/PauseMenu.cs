@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     public static PauseMenu instance;
     bool active = false;
     [SerializeField] AudioMixer audioMixer;
+    [SerializeField] Slider mainSlider;
 
     // Start is called before the first frame update
     void Awake()
@@ -103,6 +104,12 @@ public class PauseMenu : MonoBehaviour
 
     private void Start() {
         //SetVolume(.2f);
+        mainSlider.onValueChanged.AddListener(delegate {ValueChangeCheck(); });
+    }
+
+    public void ValueChangeCheck()
+    {
+        audioMixer.SetFloat("MasterVolume", Mathf.Log10(mainSlider.value) * 20);
     }
 
     public void OpenMainPauseMenu()
