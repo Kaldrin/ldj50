@@ -27,6 +27,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CanvasScaler))]
 public class SceneTransitionManagerR : MonoBehaviour
 {
+    // INSTANCE
+    public static SceneTransitionManagerR instance;
+
+
     int sceneToLoadIndex = 0;
     [SerializeField] Animation animationComponentToUse = null;
     [SerializeField] string quitSceneAnimationName = "Quit";
@@ -42,7 +46,7 @@ public class SceneTransitionManagerR : MonoBehaviour
 
 
 
-
+    void Awake() => instance = this;
 
     void Update()
     {
