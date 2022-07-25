@@ -12,11 +12,13 @@ public class PauseMenu : MonoBehaviour
     bool active = false;
     [SerializeField] AudioMixer audioMixer;
     [SerializeField] Slider mainSlider;
+    GameObject lastselect;
 
     // Start is called before the first frame update
     void Awake()
     {
         instance = this;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void PressEscape()
@@ -25,9 +27,23 @@ public class PauseMenu : MonoBehaviour
         else Pause();
     }
 
+    private void Update()
+    {
+        if (EventSystem.current.currentSelectedGameObject == null)
+        {
+            EventSystem.current.SetSelectedGameObject(lastselect);
+        }
+        else
+        {
+            lastselect = EventSystem.current.currentSelectedGameObject;
+        }
+    }
+
     void Pause()
     {
         transform.GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
         EventSystem.current.SetSelectedGameObject(transform.GetChild(0).GetChild(1).GetChild(1).gameObject);
         Flame[] flames = GameObject.FindObjectsOfType<Flame>();
         for (int i = 0; i < flames.Length; i++)
@@ -87,6 +103,7 @@ public class PauseMenu : MonoBehaviour
             animators[i].speed = 1;
         }*/
         active = false;
+        PlayerPrefs.Save();
     }
 
     public void OpenOptionsMenu()
@@ -96,20 +113,15 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(transform.GetChild(0).GetChild(2).GetChild(2).gameObject);
     }
 
-    public void SetVolume(float sliderValue)
+    private void Start()
     {
-        Debug.Log(sliderValue);
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(sliderValue) * 20);
-    }
-
-    private void Start() {
-        //SetVolume(.2f);
-        mainSlider.onValueChanged.AddListener(delegate {ValueChangeCheck(); });
+        mainSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 
     public void ValueChangeCheck()
     {
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(mainSlider.value) * 20);
+        PlayerPrefs.SetFloat("soundVolume", mainSlider.value);
     }
 
     public void OpenMainPauseMenu()
