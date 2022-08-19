@@ -14748,6 +14748,7 @@ GameObject:
   - component: {fileID: 6223970586065089627}
   - component: {fileID: 6223970586065089626}
   - component: {fileID: 6223970586065089629}
+  - component: {fileID: 5153842257712685681}
   m_Layer: 10
   m_Name: Flame
   m_TagString: Untagged
@@ -14794,6 +14795,7 @@ MonoBehaviour:
   propagationCooldown: 0.7
   spawnPropagationCooldown: 1
   standing: 1
+  moving: 0
   effects:
   - {fileID: 2120788897}
   - {fileID: 1296002996}
@@ -14802,7 +14804,6 @@ MonoBehaviour:
   - {fileID: 1978784221}
   colliders:
   - {fileID: 6223970586065089629}
-  moving: 0
   currentSectionIndex: 0
 --- !u!70 &6223970586065089629
 CapsuleCollider2D:
@@ -14820,6 +14821,18 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.5, y: 0.5}
   m_Direction: 0
+--- !u!114 &5153842257712685681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6223970586065089628}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 492224fce534e24419607c12ae01f087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6223970587374805009
 GameObject:
   m_ObjectHideFlags: 0

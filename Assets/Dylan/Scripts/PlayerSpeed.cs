@@ -9,7 +9,7 @@ public class PlayerSpeed : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("GetStartLocation", 5);
+        GetStartLocation();
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class PlayerSpeed : MonoBehaviour
     void GetStartLocation()
     {
         startPoint = transform.localPosition;
-            Invoke("PrintDistance", 1);
+        Invoke("PrintDistance", 1);
     }
 
     void PrintDistance()

@@ -14678,7 +14678,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.44
+  m_Radius: 1.5
 --- !u!50 &5062178516241067712
 Rigidbody2D:
   serializedVersion: 4
@@ -24488,6 +24488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onFire: 0
+  unconsume: 0
   action:
     m_PersistentCalls:
       m_Calls:
