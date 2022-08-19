@@ -8,12 +8,15 @@ public class Level : MonoBehaviour
 {
     public GameObject cinemachineBrain;
     [SerializeField] Level nextLevel;
+    [SerializeField] int nextLevelIndex;
     public UnityEvent actionsAtStart;
     [SerializeField] bool firstLevel;
     [SerializeField] GameObject startPoint;
+    [SerializeField] bool multiSceneDebug = false;
 
-    private void Start() {
-        if(firstLevel)
+    private void Start()
+    {
+        if (firstLevel)
         {
             SetAllObjects();
             GameManager.instance.currentLevel = gameObject;
@@ -24,9 +27,16 @@ public class Level : MonoBehaviour
 
     public void ChangeLevel()
     {
-        EndCurrentLevel();
-        nextLevel.StartLevel();
-        Invoke("RemovePreviousLevel", 2);
+        if (multiSceneDebug)
+        {
+            MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex);
+        }
+        else
+        {
+            EndCurrentLevel();
+            nextLevel.StartLevel();
+            Invoke("RemovePreviousLevel", 2);
+        }
     }
 
     void EndCurrentLevel() => cinemachineBrain.SetActive(false);
@@ -37,7 +47,7 @@ public class Level : MonoBehaviour
         actionsAtStart?.Invoke();
         gameObject.SetActive(true);
         GameManager.instance.currentLevel = gameObject;
-        
+
         // Reset Flame State
     }
 
@@ -50,19 +60,19 @@ public class Level : MonoBehaviour
     IEnumerator WaitBeforeRestart()
     {
         Meche.instance.Reset();
-        
-        
+
+
         // Kill flames
         foreach (Flame flame in FindObjectsOfType<Flame>())
             flame.Die();
-        
+
         RestartLevelElements();
-        
-        
+
+
         yield return new WaitForSeconds(1);
 
 
-        
+
         Character.instance.GetControlsBack();
         Meche.instance.SetFollowPlayer(true);
         /*
@@ -83,17 +93,17 @@ public class Level : MonoBehaviour
         foreach (Oil oil in FindObjectsOfType<Oil>())
             if (oil)
                 oil.Reset();
-        foreach(HiddenDoorTimer hiddenDoorTimer in FindObjectsOfType<HiddenDoorTimer>())
-            if(hiddenDoorTimer)
+        foreach (HiddenDoorTimer hiddenDoorTimer in FindObjectsOfType<HiddenDoorTimer>())
+            if (hiddenDoorTimer)
                 hiddenDoorTimer.Reset();
-        foreach(Torch torch in FindObjectsOfType<Torch>())
+        foreach (Torch torch in FindObjectsOfType<Torch>())
             if (torch)
                 torch.Reset();
-        foreach(CameraConfinerManager confinerManager in FindObjectsOfType<CameraConfinerManager>())
-            if(confinerManager)
+        foreach (CameraConfinerManager confinerManager in FindObjectsOfType<CameraConfinerManager>())
+            if (confinerManager)
                 confinerManager.Reset();
-        foreach(HiddenCollisionTrigger collisionTrigger in FindObjectsOfType<HiddenCollisionTrigger>())
-            if(collisionTrigger)
+        foreach (HiddenCollisionTrigger collisionTrigger in FindObjectsOfType<HiddenCollisionTrigger>())
+            if (collisionTrigger)
                 collisionTrigger.Reset();
     }
 }
