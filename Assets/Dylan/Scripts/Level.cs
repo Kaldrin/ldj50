@@ -25,7 +25,7 @@ public class Level : MonoBehaviour
 
     void SetAllObjects() => actionsAtStart?.Invoke();
 
-    public void ChangeLevel()
+    public void ChangeLevel(int nextLevelIndex)
     {
         if (multiSceneDebug)
         {

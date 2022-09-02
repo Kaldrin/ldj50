@@ -15,9 +15,18 @@ EditorBuildSettings:
     path: Assets/Dylan/Scenes/MultiSceneExemple.unity
     guid: bb6c889f5cc2f08468a7333635baf650
   - enabled: 1
+    path: Assets/Dylan/Scenes/LastLevelCorridor.unity
+    guid: f1390bfe3d86f0f4c9835aa6b05b5494
+  - enabled: 1
     path: Assets/Dylan/Scenes/MultiSceneMain.unity
     guid: ae8f0b1cfc4b8d847b2ac2bd0059de54
   - enabled: 1
     path: Assets/Dylan/Scenes/MultiSceneTest1.unity
     guid: c3bee67a101cbee4aad0ca103efc1958
+  - enabled: 1
+    path: Assets/Dylan/Scenes/SceneTest2.unity
+    guid: e680b58546e20b249a614d790db33d2a
+  - enabled: 1
+    path: Assets/Dylan/Scenes/SceneTest3.unity
+    guid: d0cffcef8a359cd458e06b306f1c5458
   m_configObjects: {}
