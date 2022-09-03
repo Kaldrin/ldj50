@@ -12,7 +12,6 @@ public class Level : MonoBehaviour
     public UnityEvent actionsAtStart;
     [SerializeField] bool firstLevel;
     [SerializeField] GameObject startPoint;
-    [SerializeField] bool multiSceneDebug = false;
 
     private void Start()
     {
@@ -21,23 +20,10 @@ public class Level : MonoBehaviour
             SetAllObjects();
             GameManager.instance.currentLevel = gameObject;
         }
+        else StartLevel();
     }
 
     void SetAllObjects() => actionsAtStart?.Invoke();
-
-    public void ChangeLevel(int nextLevelIndex)
-    {
-        if (multiSceneDebug)
-        {
-            MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex);
-        }
-        else
-        {
-            EndCurrentLevel();
-            nextLevel.StartLevel();
-            Invoke("RemovePreviousLevel", 2);
-        }
-    }
 
     void EndCurrentLevel() => cinemachineBrain.SetActive(false);
     void RemovePreviousLevel() => gameObject.SetActive(false);
@@ -45,7 +31,7 @@ public class Level : MonoBehaviour
     public void StartLevel()
     {
         actionsAtStart?.Invoke();
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
         GameManager.instance.currentLevel = gameObject;
 
         // Reset Flame State

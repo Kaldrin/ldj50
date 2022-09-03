@@ -20,10 +20,20 @@ public class LighterTrigger : MonoBehaviour
             LightRopeAtArea();
     }
 
+    private void Start() {
+        firePrefab = GameObject.FindObjectOfType<Flame>().gameObject;
+        music = GameObject.Find("Music").GetComponent<AudioFade>();
+        ambianceAudioFade = GameObject.Find("Ambiance").GetComponent<AudioFade>();
+    }
+
     void LightRopeAtArea()
     {
-        CheckForAdjacentSection();
-        ropeToLight.burning = true;
+        Meche[] ropes = GameObject.FindObjectsOfType<Meche>();
+        foreach(Meche rope in ropes)
+        {
+            CheckForAdjacentSection(rope);
+            rope.burning = true;  
+        }
         if (ambianceAudioFade)
             ambianceAudioFade.FadeOut();
         Invoke("TriggerMusic", 1.2f);
@@ -40,23 +50,23 @@ public class LighterTrigger : MonoBehaviour
     }
     
     
-    void CheckForAdjacentSection()
+    void CheckForAdjacentSection(Meche rope)
     {
-        for (int i = 0; i < ropeToLight.lineRenderer.positionCount - 1; i++)
+        for (int i = 0; i < rope.lineRenderer.positionCount - 1; i++)
         {
-            Vector3 position = ropeToLight.lineRenderer.GetPosition(i);
+            Vector3 position = rope.lineRenderer.GetPosition(i);
             if (position.z <= 0.2f && Vector3.Distance(position, lightingArea.position) < 1f)
             {
-                SpreadFire(i);
+                SpreadFire(i, rope);
                 return;
             }
         }
     }
-    void SpreadFire(int index)
+    void SpreadFire(int index, Meche rope)
     {
         Flame newFlame = Instantiate(firePrefab).GetComponent<Flame>();
         newFlame.standing = false;
-        newFlame.lineRendererToFollow = ropeToLight.lineRenderer;
+        newFlame.lineRendererToFollow = rope.lineRenderer;
         newFlame.RestartMovingFromBeginning(index);
     }
 }

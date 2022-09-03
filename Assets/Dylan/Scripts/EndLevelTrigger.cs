@@ -7,6 +7,6 @@ public class EndLevelTrigger : MonoBehaviour
 {
     [SerializeField] int nextLevelIndex;
 
-    private void OnTriggerEnter2D(Collider2D other) => transform.parent.parent.GetComponent<Level>().ChangeLevel(nextLevelIndex);
+    private void OnTriggerEnter2D(Collider2D other) => MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex);
     private void OnDrawGizmos() => Gizmos.DrawCube(transform.position, transform.localScale);
 }
