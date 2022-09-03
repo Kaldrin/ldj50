@@ -19,7 +19,6 @@ public class Level : MonoBehaviour
     [SerializeField] float actionsAtStartDelay = 0f;
     [SerializeField] bool firstLevel;
     [SerializeField] GameObject startPoint;
-    [SerializeField] bool multiSceneDebug = false;
 
 
     private void Start()
@@ -29,6 +28,7 @@ public class Level : MonoBehaviour
             SetAllObjects();
             GameManager.instance.currentLevel = gameObject;
         }
+        else StartLevel();
     }
     private void OnEnable() => cinemachineBrain.SetActive(true);
 
@@ -44,18 +44,8 @@ public class Level : MonoBehaviour
     /// <param name="characterWhoTriggeredTheChange"></param>
     public void ChangeLevel(Character characterWhoTriggeredTheChange, Level followingLevel)
     {
-        /*
-        if (multiSceneDebug)
-        {
-            MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex);
-        }
-        else
-        {
-            EndCurrentLevel();
-            nextLevel.StartLevel();
-            Invoke("RemovePreviousLevel", 2);
-        }
-        */
+        MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex);
+        
         EndCurrentLevel();
 
         Level newlyActivatedLevel = nextLevel;
@@ -97,8 +87,9 @@ public class Level : MonoBehaviour
 
     public void StartLevel()
     {
+        actionsAtStart?.Invoke();
         SetAllObjects();
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
         GameManager.instance.currentLevel = gameObject;
     }
 

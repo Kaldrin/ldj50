@@ -19,7 +19,7 @@ public class EndLevelTrigger : MonoBehaviour
     {
         if (transform.parent.parent.GetComponent<Level>() != nextLevel)
         {
-            transform.parent.parent.GetComponent<Level>().ChangeLevel(other.transform.parent.GetComponent<Character>(), nextLevel);
+            MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex);
             triggered = true;
 
             // Trigger special actions if specific player index triggered it

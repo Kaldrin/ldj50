@@ -208,7 +208,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8328925723239884707, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
       propertyPath: m_Priority
-      value: 16
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8328925723239884707, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
       propertyPath: m_Lens.OrthographicSize

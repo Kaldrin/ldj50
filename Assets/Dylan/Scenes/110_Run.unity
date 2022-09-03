@@ -1276,7 +1276,6 @@ MonoBehaviour:
       m_Calls: []
   firstLevel: 1
   startPoint: {fileID: 578904012}
-  multiSceneDebug: 0
 --- !u!4 &71052824
 Transform:
   m_ObjectHideFlags: 0
@@ -33553,7 +33552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aeeea36157909642923a786d525ec24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextLevelIndex: 0
+  nextLevelIndex: 20
 --- !u!212 &1669114935
 SpriteRenderer:
   m_ObjectHideFlags: 0

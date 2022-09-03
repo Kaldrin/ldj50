@@ -18,6 +18,17 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         instance = this;
     }
 
+    private void Start() {
+        StartCoroutine(LoadMainMenuAtStart());
+    }
+
+    IEnumerator LoadMainMenuAtStart()
+    {
+        async = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+        yield return async;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(2));
+    }
+
     public void LoadNextLevelAdditive(int nextLevelIndex, Action nextVoid = null)
     {
         StartCoroutine(LoadCoroutine(nextLevelIndex, nextVoid));
@@ -30,6 +41,7 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         int actualSceneIndex = SceneManager.GetActiveScene().buildIndex;
         async = SceneManager.LoadSceneAsync(nextSceneIndex, LoadSceneMode.Additive);
         yield return async;
+        yield return new WaitForSecondsRealtime(1);
         async = SceneManager.UnloadSceneAsync(actualSceneIndex);
         yield return async;
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(nextSceneIndex));
@@ -48,12 +60,27 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
 
     public void LoadLastLevel()
     {
-        LoadNextLevelAdditive(lastLevelIndex, TeleportPlayerToLastLevel);
+        GameManager.instance.currentLevel.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
+        StartCoroutine(LoadLastLevelCoroutine(lastLevelIndex));
+    }
+
+    IEnumerator LoadLastLevelCoroutine(int nextSceneIndex)
+    {
+        int actualSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        async = SceneManager.LoadSceneAsync(nextSceneIndex, LoadSceneMode.Additive);
+        yield return async;
+        yield return null;
+        TeleportPlayerToLastLevel();
+        //yield return new WaitForSecondsRealtime(1);
+        async = SceneManager.UnloadSceneAsync(actualSceneIndex);
+        yield return async;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(nextSceneIndex));
     }
 
     void TeleportPlayerToLastLevel()
     {
-        Vector2 nextLevelStartpoint = GameObject.FindObjectOfType<Level>().transform.GetChild(4).GetChild(0).position;
+        Vector2 nextLevelStartpoint = GameManager.instance.currentLevel.transform.GetChild(4).GetChild(0).position;
+        Debug.Log(nextLevelStartpoint);
         Character[] players = GameObject.FindObjectsOfType<Character>();
         foreach(Character player in players)
         {
