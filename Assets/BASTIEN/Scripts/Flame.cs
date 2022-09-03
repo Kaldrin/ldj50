@@ -4,29 +4,48 @@ using System.Collections.Generic;
 using JGDT.Audio.FadeInOut;
 using UnityEngine;
 
+
+
+/// <summary>
+/// Flame that follows a LineRenderer. Doesn't even care about the Wick script
+/// </summary>
 public class Flame : MonoBehaviour
 {
     public LineRenderer lineRendererToFollow = null;
-    [SerializeField] private float speed = 0.002f;
-    [SerializeField] private bool startOnStart = false;
-    [SerializeField] private float distanceToSpread = 0f;
     [SerializeField] private GameObject flamePrefab = null;
-    [SerializeField] private int indexNonSpreadRange = 5;
-    private bool canPropagate = false;
-    [SerializeField] private float propagationCooldown = 2f;
-    [SerializeField] private float spawnPropagationCooldown = 1f;
-    
-    private float propagationStartTime = 0f;
-    [HideInInspector] public  bool standing = true;
 
 
 
-
+    [Header("MOVEMENT")]
+    [SerializeField] private float speed = 0.002f;
     private float currentSectionLength = 0f;
     private float currentSectionRanDistance = 0f;
     private Vector3 currentPointPos = new Vector3(0f, 0f, 0f);
     private Vector3 nextpoinsPos = new Vector3(0f, 0f, 0f);
     public bool moving = false;
+    [HideInInspector] bool direction = true;
+
+
+
+    [Header("PROPAGATION")]
+    [SerializeField] private float distanceToSpread = 0f;
+    [Tooltip("The flame duplicates where near other segments of a line renderer, but it shouldn't duplicate with the segments right in front or behind it")]
+    [SerializeField] private int indexNonSpreadRange = 5;
+    private bool canPropagate = false;
+    [SerializeField] private float propagationCooldown = 2f;
+    private float propagationStartTime = 0f;
+    [HideInInspector] public bool standing = true;
+
+    LineRenderer[] wicksList;
+    // Won't refresh the list of wicks in game every section (FindObject)
+    // but to ensure that it works well depending on how & when we spawn a new player,
+    // it's good to refresh it every X sections ran through by the flame
+    // I could have made a system with a central WichManager but this way ensures that it's more fool proof.
+    // If performances are too impacted we can switch to a WickManager system keeping tracks of LineRenderers instantiation instead of using a FindObject
+    int numberOfectionsBeforeRefreshWicksList = 10;
+    int sectionBeforeWicksListRefreshCounter = 0;
+
+
 
 
     [Header("FX")]
@@ -34,7 +53,8 @@ public class Flame : MonoBehaviour
     [SerializeField] private List<SpriteRenderer> sprites = new List<SpriteRenderer>();
 
 
-    [Header("COLLIDERS")][SerializeField] private List<Collider2D> colliders = new List<Collider2D>();
+    [Header("COLLIDERS")]
+    [SerializeField] private List<Collider2D> colliders = new List<Collider2D>();
 
 
 
@@ -45,14 +65,10 @@ public class Flame : MonoBehaviour
 
 
 
-    private void Start()
-    {
-        /*
-        if (startOnStart)
-            Invoke("StartMoving", 3f);
-            */
-        //Character.instance.GetComponent<AudioSource>().Play();
-    }
+
+
+
+
     public void StartMoving() => RestartMovingFromBeginning(0);
     private void Update() => UpdateMoving();
 
@@ -60,26 +76,23 @@ public class Flame : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.name == "water")
-        {
-            /*
-            AudioFade ambiance = GameObject.Find("Ambiance").GetComponent<AudioFade>();
-            if (!ambiance.audioSource.isPlaying)
-                ambiance.audioSource.Play();
-                
-            ambiance.FadeIn();
-            */
             Die();
-        }
 
 
         if (!moving && col.CompareTag("Player"))
         {
             standing = false;
+            // With more than one player it can have more than one wick to propagate to,
+            // better to make the system wick agnostic, just check all the line renderers of the scene
             lineRendererToFollow.GetComponent<Meche>().burning = true;
             RestartMovingFromBeginning(lineRendererToFollow.positionCount - 2);
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
         else if (moving && col.CompareTag("Player"))
-            TouchPlayer();
+        {
+            col.transform.parent.GetComponent<Character>().Die();
+            Die();
+        }
         // OIL
         else if (moving && col.GetComponent<Oil>() && !col.GetComponent<Oil>().onFire)
             col.GetComponent<Oil>().SetOnFire(true);
@@ -93,17 +106,14 @@ public class Flame : MonoBehaviour
     public void SetMoving(bool state) => moving = state;
     public void RestartMovingFromBeginning(int index)
     {
-        if (lineRendererToFollow && lineRendererToFollow.positionCount > 5)
+        if (lineRendererToFollow)
         {
             canPropagate = false;
             propagationStartTime = Time.time;
             currentSectionIndex = index;
-            //transform.position = lineRendererToFollow.GetPosition(0);
             NewSection(index, 0);
             SetMoving(true);
         }
-        //else
-        //Invoke("RestartMovingFromBeginning", 1f);
     }
     #endregion
 
@@ -115,35 +125,47 @@ public class Flame : MonoBehaviour
     #region MOVING
     void NewSection(int newSectionIndex, float startValue)
     {
-        currentPointPos = lineRendererToFollow.GetPosition(currentSectionIndex);
+        if (lineRendererToFollow.positionCount > currentSectionIndex && currentSectionIndex >= 0)
+            currentPointPos = lineRendererToFollow.GetPosition(currentSectionIndex);
 
         // Burn the rope
-        if (lineRendererToFollow.positionCount > currentSectionIndex - 1 && currentSectionIndex - 1 >= 0)
+        int previousSectionDirection = direction ? - 1 : 1;
+        if (lineRendererToFollow.positionCount > currentSectionIndex + previousSectionDirection && currentSectionIndex + previousSectionDirection >= 0)
         {
-            Vector3 burnPos = lineRendererToFollow.GetPosition(currentSectionIndex - 1);
+            Vector3 burnPos = lineRendererToFollow.GetPosition(currentSectionIndex + previousSectionDirection);
             burnPos.z = 1;
-            lineRendererToFollow.SetPosition(currentSectionIndex - 1, burnPos);
+            lineRendererToFollow.SetPosition(currentSectionIndex + previousSectionDirection, burnPos);
         }
-        
-                
-
-        
 
 
 
-        nextpoinsPos = lineRendererToFollow.GetPosition(currentSectionIndex + 1);
+
+        int nextSectionDirection = direction ? 1 : -1;
+        if (lineRendererToFollow.positionCount > currentSectionIndex + nextSectionDirection && currentSectionIndex + nextSectionDirection >= 0)
+            nextpoinsPos = lineRendererToFollow.GetPosition(currentSectionIndex + nextSectionDirection);
         // If Z pos not 0, means it has burnt already, can't burn anymore
         if (nextpoinsPos.z > 0.2f)
+        {
+            // Burn all the rope around
+            Vector3 burnPos = lineRendererToFollow.GetPosition(currentSectionIndex);
+            burnPos.z = 1;
+            lineRendererToFollow.SetPosition(currentSectionIndex, burnPos);
+            burnPos = lineRendererToFollow.GetPosition(currentSectionIndex + nextSectionDirection);
+            burnPos.z = 1;
+            lineRendererToFollow.SetPosition(currentSectionIndex + nextSectionDirection, burnPos);
+
+            // Then die
             Die();
+        }
 
 
         currentSectionLength = CalculateCurrentSectionLength();
         currentSectionRanDistance = startValue;
-        //UpdateGradient();
 
+
+        // PROPAGATE
         if (canPropagate && moving)
             CheckForAdjacentSection();
-        //canPropagate = true;
     }
 
     float CalculateCurrentSectionLength()
@@ -166,9 +188,11 @@ public class Flame : MonoBehaviour
             // If reached the end of the section
             if (currentSectionRanDistance >= currentSectionLength)
             {
-                currentSectionIndex++;
-                if (currentSectionIndex == lineRendererToFollow.positionCount - 1)
-                    TouchPlayer();
+                currentSectionIndex = direction ? currentSectionIndex + 1 : currentSectionIndex - 1;
+
+                // End of the LineRenderer
+                if ((currentSectionIndex >= lineRendererToFollow.positionCount - 1) || (currentSectionIndex == 0))
+                    ReachedEnd();
                 else
                     NewSection(currentSectionIndex, currentSectionRanDistance - currentSectionLength);
             }
@@ -186,38 +210,12 @@ public class Flame : MonoBehaviour
         newPosition.z = -0.5f;
         newPosition = Vector3.Lerp(transform.position, newPosition, 0.08f);
         if (moving)
-            transform.position = newPosition;
-    }
+            if (newPosition.x != float.NaN && newPosition.y != float.NaN)
+            {
+                transform.position = newPosition;
+            }
+            
 
-
-    [Obsolete]
-    void UpdateGradient()
-    {
-
-        Gradient newGradient = new Gradient();
-        float ratio = (float)((float)currentSectionIndex / (float)lineRendererToFollow.positionCount);
-        GradientAlphaKey[] alphaKeys = new GradientAlphaKey[4];
-        GradientColorKey[] colorKeys = new GradientColorKey[2] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 0f) };
-
-        // Leftest key
-        alphaKeys[0].alpha = 0f;
-        alphaKeys[0].time = 0;
-
-        // Left key
-        alphaKeys[1].alpha = 0f;
-        alphaKeys[1].time = ratio + (1 / lineRendererToFollow.positionCount) * 5;
-
-        // Right key
-        alphaKeys[2].alpha = 1f;
-        alphaKeys[2].time = ratio + (1 / lineRendererToFollow.positionCount) * 10;
-
-        // Rightest key
-        alphaKeys[3].alpha = 1f;
-        alphaKeys[3].time = 1f;
-
-
-        newGradient.SetKeys(colorKeys, alphaKeys);
-        lineRendererToFollow.colorGradient = newGradient;
     }
     #endregion
 
@@ -228,30 +226,70 @@ public class Flame : MonoBehaviour
 
 
     #region PROPAGATE
+    /// <summary>
+    /// Triggered once per section of the line renderer it's following the flame runs through
+    /// </summary>
     void CheckForAdjacentSection()
     {
-        for (int i = 0; i < lineRendererToFollow.positionCount - 1; i++)
-        {
-            int indexDifference = Mathf.Abs(currentSectionIndex - i);
-            Vector3 position = lineRendererToFollow.GetPosition(i);
+        // REFRESH
+        // Check if should refresh the list of LineRenderers the flame can propagate to
+        sectionBeforeWicksListRefreshCounter--;
+        if (sectionBeforeWicksListRefreshCounter <= 0)
+            RefreshWicksList();
 
-            if (canPropagate && position.z == 0 && Vector3.Distance(position, transform.position) < distanceToSpread && indexDifference > indexNonSpreadRange)
+        // CHECK FOR PROPAGATION
+        // With more than one player it can have more than one wick to propagate to,
+        // better to make the system wick agnostic, just check all the line renderers of the scene
+        for (int y = 0; y < wicksList.Length; y++)
+            for (int i = 0; i < wicksList[y].positionCount - 1; i++)
             {
-                SpreadFire(i);
-                canPropagate = false;
+                int indexDifference = Mathf.Abs(currentSectionIndex - i);
+                Vector3 position = wicksList[y].GetPosition(i);
+
+                if (Vector3.Distance(position, transform.position) < distanceToSpread && canPropagate && position.z < 0.19 && indexDifference > indexNonSpreadRange)
+                {
+                    SpreadFire(i, wicksList[y]);
+                    canPropagate = false;
+                }
             }
-        }
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
     }
-    void SpreadFire(int index)
+    void SpreadFire(int index, LineRenderer newFlameLineRendererToFollow)
     {
         if (canPropagate)
         {
             propagationStartTime = Time.time;
-            Flame newFlame = Instantiate(flamePrefab).GetComponent<Flame>();
+
+            // FLAME 1
+            GameObject loadedFlame = Resources.Load("Flame") as GameObject;
+            Flame newFlame = GameObject.Instantiate(loadedFlame).GetComponent<Flame>();
+
+            newFlame.transform.position = currentPointPos;
             newFlame.standing = false;
-            newFlame.lineRendererToFollow = lineRendererToFollow;
+            newFlame.lineRendererToFollow = newFlameLineRendererToFollow;
+            newFlame.flamePrefab = flamePrefab;
             newFlame.RestartMovingFromBeginning(index);
+            newFlame.direction = direction;
+
+            // FLAME 2
+            newFlame = GameObject.Instantiate(loadedFlame).GetComponent<Flame>();
+
+            newFlame.transform.position = currentPointPos;
+            newFlame.standing = false;
+            newFlame.lineRendererToFollow = newFlameLineRendererToFollow;
+            newFlame.flamePrefab = flamePrefab;
+            newFlame.RestartMovingFromBeginning(index);
+            newFlame.direction = !direction;
         }
+    }
+    /// <summary>
+    /// Refresh the list of LineRenderers the flame can propagate to, so that it can work in multiplayer with multiple wicks
+    /// </summary>
+    void RefreshWicksList()
+    {
+        sectionBeforeWicksListRefreshCounter = numberOfectionsBeforeRefreshWicksList;
+        wicksList = FindObjectsOfType<LineRenderer>();
     }
     #endregion
 
@@ -259,23 +297,39 @@ public class Flame : MonoBehaviour
 
 
 
-
-    void TouchPlayer()
+    /// <summary>
+    /// Triggered when the flame reaches the end of the LineRenderer it's following
+    /// </summary>
+    void ReachedEnd()
     {
-        Character.instance.Die();
-        //col.transform.parent.GetComponent<AudioSource>().Stop();
+        // If we have more than one player we can't use instances
+        //Character.instance.Die();
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (lineRendererToFollow.GetComponent<Meche>().followedPlayer)
+            lineRendererToFollow.GetComponent<Meche>().followedPlayer.Die();
+
+
         Die();
     }
 
+
+
+
+    #region FLAME DEATH
     public void Die()
     {
         DisableEffects();
         moving = false;
         StartCoroutine(FadeSprites());
         DestroyColliders();
+
+        // Wait for graphics to fade out before fully destroying the fire
         Destroy(gameObject, 5f);
     }
 
+    /// <summary>
+    /// Stops the particle systems of the fire, before disappearing
+    /// </summary>
     void DisableEffects()
     {
         if (effects != null && effects.Count > 0)
@@ -284,28 +338,35 @@ public class Flame : MonoBehaviour
                     effects[i].Stop();
     }
 
+    /// <summary>
+    /// Fades out the alpha of the sprites graphics of the fire, if it has any (Unused for now)
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FadeSprites()
     {
         if (sprites != null && sprites.Count > 0)
         {
             bool notFaded = true;
+
             while (notFaded)
             {
                 notFaded = false;
+
                 for (int i = 0; i < sprites.Count; i++)
-                {
                     if (sprites[i] && sprites[i].color.a > 0)
                     {
                         sprites[i].color = new Color(sprites[i].color.r, sprites[i].color.g, sprites[i].color.b, sprites[i].color.a - 0.1f);
                         notFaded = true;
                     }
-                }
 
                 yield return new WaitForSeconds(0.01f);
             }
         }
     }
 
+    /// <summary>
+    /// Destroys the colliders of the fire before destroying itself so the FX has time to fadeout
+    /// </summary>
     void DestroyColliders()
     {
         if (colliders != null && colliders.Count > 0)
@@ -313,4 +374,5 @@ public class Flame : MonoBehaviour
                 if (colliders[i])
                     Destroy(colliders[i]);
     }
+    #endregion
 }

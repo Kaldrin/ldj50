@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+/// <summary>
+/// Scriptn that manages the oil object's behaviour, especially around fire propagation
+/// </summary>
 public class Oil : MonoBehaviour
 {
     public bool onFire = false;
@@ -18,13 +23,18 @@ public class Oil : MonoBehaviour
     [SerializeField] private LayerMask propagationMask = new LayerMask();
 
 
+
+
+
     private void Update()
     {
+        // Try to propagate every X seconds
         if (onFire)
             if (!canPropagate && Time.time > propagationStartTime + propagationCooldown)
                 TryToPropagate();
     }
 
+    // When it's not ignited it can only collide with the Flames (2D physics rules settings)
     private void OnTriggerEnter2D(Collider2D col)
     {
         // PROPAGATION
@@ -45,13 +55,14 @@ public class Oil : MonoBehaviour
     public void SetOnFire(bool state)
     {
         onFire = state;
+        // Now that it's on fire it can collide with a player to kill it, but it's a sub object to be precise
         playerColliderDetector.SetActive(state);
         if (state)
         {
             propagationStartTime = Time.time;
             oildCollider.enabled = false;
             
-            //FX
+            // FX
             if (fireFX)
                 fireFX.Play();
         }
@@ -75,7 +86,6 @@ public class Oil : MonoBehaviour
     {
         canPropagate = false;
         propagationStartTime = Time.time;
-        //oilPropagationCollider.SetActive(true);
 
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, propagationRadius, propagationMask);
         foreach (Collider2D col in cols)

@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-
+/// <summary>
+/// Torch object behaviour, works pretty much like a Zelda torch
+/// </summary>
 public class Torch : MonoBehaviour
 {
     [HideInInspector] public bool onFire = false;

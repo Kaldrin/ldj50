@@ -12,20 +12,32 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Character : MonoBehaviour
 {
+    // We can't use singletons if we want a multiplayer
     // SINGLETON
-    public static Character instance;
+    //public static Character instance;
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     [SerializeField] private Rigidbody2D rigid2D = null;
     [FormerlySerializedAs("characterAnimator")] [SerializeField] public Animator faceAnimator = null;
 
 
+
+    [Header("WICK")]
+    [SerializeField] GameObject wickPrefab = null;
+    [SerializeField] Transform wickFollowPoint = null;
+    Meche attachedWick = null;
+
+
     // INPUTS
     Vector2 receivedMovementVector = new Vector2(0f, 0f);
     bool pauseInput = false;
 
+
+
     [Header("MOVEMENTS")]
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
+    [HideInInspector] public float baseSpeed = 300f;
     public float speed = 3f;
     public bool canReceiveInputs = true;
 
@@ -51,7 +63,11 @@ public class Character : MonoBehaviour
 
 
 
-
+    private void Start()
+    {
+        baseSpeed = speed;
+        SpawnOwnWick();
+    }
     private void FixedUpdate() => ManagementMovements();
     private void Update()
     {
@@ -88,7 +104,13 @@ public class Character : MonoBehaviour
 
 
     #region MOVEMENTS
-    void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed * Time.deltaTime;
+    void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed * Time.deltaTime * LocalScaleAverage();
+    // Used to base the character's speed on its scale, scale which should be 1 by default.
+    float LocalScaleAverage()
+    {
+        Vector3 scale = transform.localScale;
+        return (scale.x + scale.y + scale.z) / 3;
+    }
     void ManagementMovements()
     {
         if (canReceiveInputs)
@@ -122,6 +144,9 @@ public class Character : MonoBehaviour
     {
         StopMoving();
 
+        // KILL FLAMES
+        foreach (Flame flame in FindObjectsOfType<Flame>())
+            flame.Die();
 
         // FX
         if (explosionFX)
@@ -135,17 +160,24 @@ public class Character : MonoBehaviour
             explosionSFX.Play();
 
 
-        //transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-        //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        //transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        //transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
-        //transform.GetChild(0)?.GetComponent<AudioSource>()?.Play();
+        // CAMERA SHAKE
+        // That's a complicated and not foolproof way at all to shake the camera
         GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(10f, 0.3f);
-        Meche.instance.Reset();
+
+
+        // We can't use a single wick instance for 2 players mode, working on a more foolproof and adaptable system
+        // Meche.instance.Reset();
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /*
+        // RESET WICKS
+        foreach (Meche wick in FindObjectsOfType<Meche>())
+            wick.Reset();
+        */
 
 
 
         yield return new WaitForSeconds(1f);
+
 
 
         // RESET
@@ -164,6 +196,26 @@ public class Character : MonoBehaviour
 
 
 
+    // WICK
+    /// <summary>
+    /// Spawns the wick of the player and sets it up for it.
+    /// </summary>
+    void SpawnOwnWick()
+    {
+        if (!attachedWick)
+        {
+            Meche newWick = Instantiate(wickPrefab).GetComponent<Meche>();
+            newWick.followPoint = wickFollowPoint;
+            newWick.SetFollowPlayer(true);
+            newWick.followedPlayer = this;
+            attachedWick = newWick;
+        }
+    }
+
+
+
+
+
     // EDITOR
     /// <summary>
     /// Automatically assign some references
@@ -175,5 +227,5 @@ public class Character : MonoBehaviour
     }
     private void OnValidate() => GetMissingComponents();
 
-    private void Awake() => instance = this;
+    //private void Awake() => instance = this;
 }
