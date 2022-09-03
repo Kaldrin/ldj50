@@ -6,9 +6,11 @@ using UnityEngine;
 public class GameData
 {
     public int maxLevel;
+    public int lastLevel;
 
     public GameData()
     {
         this.maxLevel = 0;
+        this.lastLevel = 0;
     }
 }

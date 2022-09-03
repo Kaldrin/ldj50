@@ -9,15 +9,69 @@ EditorBuildSettings:
     path: Assets/BASTIEN/Scenes/SAFE_SCENE.unity
     guid: d170e50e6c5f32c4aa9b59e2f9e1bd5f
   - enabled: 1
-    path: Assets/Dylan/Scenes/DYLAN_SCENE.unity
-    guid: 9216cfee68abf464d944085b026324ba
-  - enabled: 1
-    path: Assets/Dylan/Scenes/MultiSceneExemple.unity
-    guid: bb6c889f5cc2f08468a7333635baf650
-  - enabled: 1
-    path: Assets/Dylan/Scenes/MultiSceneMain.unity
+    path: Assets/Dylan/Scenes/0_Managers.unity
     guid: ae8f0b1cfc4b8d847b2ac2bd0059de54
   - enabled: 1
-    path: Assets/Dylan/Scenes/MultiSceneTest1.unity
+    path: Assets/Dylan/Scenes/00_MainMenu.unity
+    guid: bb6c889f5cc2f08468a7333635baf650
+  - enabled: 1
+    path: Assets/Dylan/Scenes/010_FirstCorridor.unity
     guid: c3bee67a101cbee4aad0ca103efc1958
+  - enabled: 1
+    path: Assets/Dylan/Scenes/011_Corner.unity
+    guid: 66e6f6cb1e96dc644bf3ad4e8f6cc183
+  - enabled: 1
+    path: Assets/Dylan/Scenes/012_Torches.unity
+    guid: 5e9f9d54733dc834284f7e764834153a
+  - enabled: 1
+    path: Assets/Dylan/Scenes/015_Simple.unity
+    guid: e568f5c40bda3dc458beb6444ee68f50
+  - enabled: 1
+    path: Assets/Dylan/Scenes/020_Cross.unity
+    guid: 6663c971b0167a143b4d5b3f3cecfeb1
+  - enabled: 1
+    path: Assets/Dylan/Scenes/025_Corridor.unity
+    guid: 8299cc2b93a36064aa8d5658f5b97a6c
+  - enabled: 1
+    path: Assets/Dylan/Scenes/030_Torches02.unity
+    guid: 066306811b2039b4380a88ca42974216
+  - enabled: 1
+    path: Assets/Dylan/Scenes/040_Run.unity
+    guid: 638586b76d4437440b96752110c9dde9
+  - enabled: 1
+    path: Assets/Dylan/Scenes/050_OilIntro.unity
+    guid: 88e5260ea3a92fd499dcb48ecbf65173
+  - enabled: 1
+    path: Assets/Dylan/Scenes/055_Corridor.unity
+    guid: 6f154c79d588ca0408066e70378c13f0
+  - enabled: 1
+    path: Assets/Dylan/Scenes/060_Propagation.unity
+    guid: 013d553d12fef1344ab33756f16f67d4
+  - enabled: 1
+    path: Assets/Dylan/Scenes/065_Corridor.unity
+    guid: f52379f24d8e355478a261161f41e22a
+  - enabled: 1
+    path: Assets/Dylan/Scenes/066_Corridor02.unity
+    guid: e7f070c5432644a4fb8b6511111ab54e
+  - enabled: 1
+    path: Assets/Dylan/Scenes/070_OilMaze.unity
+    guid: cdb313dab0868b24b8fb0a36932bb7bf
+  - enabled: 1
+    path: Assets/Dylan/Scenes/080_Run.unity
+    guid: 70ccffdbf6ba0284c894221db0c0deed
+  - enabled: 1
+    path: Assets/Dylan/Scenes/085_FlameRain.unity
+    guid: 770c38b57c1af324ba4be3634d46e292
+  - enabled: 1
+    path: Assets/Dylan/Scenes/090_Corridor.unity
+    guid: 7f9cc7803f3453d45acbb9edf431cff9
+  - enabled: 1
+    path: Assets/Dylan/Scenes/100_ButtonPress.unity
+    guid: afa24235db95aee4fbc17448f5aa9b8a
+  - enabled: 1
+    path: Assets/Dylan/Scenes/110_Run.unity
+    guid: df1282b002cb45142a751a0724d69cf1
+  - enabled: 1
+    path: Assets/Dylan/Scenes/120_End.unity
+    guid: ed05db70dda528b478dc7905043faac1
   m_configObjects: {}
