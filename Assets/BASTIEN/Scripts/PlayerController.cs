@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Character characterToControl = null;
-    [SerializeField] int playerIndex = 0;
+    [SerializeField] public int playerIndex = 0;
 
 
     [Header("INPUT AXIS")]
@@ -45,8 +45,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void GetInputValues()
     {
-        xValue = Input.GetAxis(horizontal);
-        yValue = Input.GetAxis(vertical);
+        xValue = Input.GetAxis(horizontal + playerIndex);
+        yValue = Input.GetAxis(vertical + playerIndex);
         pause = Input.GetButtonDown(cancel);
         /*
         if (Input.GetButtonDown(cancel))

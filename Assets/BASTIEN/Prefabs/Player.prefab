@@ -20045,6 +20045,7 @@ GameObject:
   - component: {fileID: 671637311062381805}
   - component: {fileID: 671637311062381807}
   - component: {fileID: 671637311062381806}
+  - component: {fileID: 79530218276416289}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -20086,8 +20087,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterToControl: {fileID: 671637311062381807}
+  playerIndex: 0
   horizontal: Horizontal
   vertical: Vertical
+  cancel: Cancel
 --- !u!114 &671637311062381807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20102,8 +20105,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid2D: {fileID: 671637311062381806}
   faceAnimator: {fileID: 1997779580}
-  receivedMovementVector: {x: 0, y: 0}
+  wickPrefab: {fileID: 0}
+  wickFollowPoint: {fileID: 0}
+  baseSpeed: 300
   speed: 300
+  canReceiveInputs: 1
   explosionFX: {fileID: 1848801248}
   graphicsParent: {fileID: 671637309413498329}
   explosionSFX: {fileID: 215784128}
@@ -20128,6 +20134,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &79530218276416289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671637311062381811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f16e2a0e5f0034cb8ff81af5f6df0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newPosition: {x: 0, y: 0, z: 0}
+  delay: 0
 --- !u!1 &6966412464647696683
 GameObject:
   m_ObjectHideFlags: 0
