@@ -6,11 +6,12 @@ using Cinemachine;
 public class CameraShake : MonoBehaviour
 {
     //CinemachineVirtualCamera cinemachine;
+    public static CameraShake instance;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        //cinemachine = GetComponent<CinemachineVirtualCamera>();
+        instance = this;
     }
 
     public void ShakeCamera(float intensity, float time) 

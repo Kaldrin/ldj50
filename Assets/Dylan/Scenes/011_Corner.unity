@@ -231,6 +231,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 404785505}
     - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
+      propertyPath: dontResetFlame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
       propertyPath: multiSceneDebug
       value: 1
       objectReference: {fileID: 0}

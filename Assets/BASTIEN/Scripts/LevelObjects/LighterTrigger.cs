@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using JGDT.Audio.FadeInOut;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 
 
@@ -29,7 +30,10 @@ public class LighterTrigger : MonoBehaviour
 
 
 
-
+    private void Start() {
+        ambianceAudioFade = GameObject.Find("Ambiance").GetComponent<AudioFade>();
+        music = GameObject.Find("Music").GetComponent<AudioFade>();
+    }
 
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -108,6 +112,7 @@ public class LighterTrigger : MonoBehaviour
         newFlame.lineRendererToFollow = lineToFollow;
         newFlame.transform.position = lightingArea.position;
         newFlame.RestartMovingFromBeginning(index);
+        SceneManager.MoveGameObjectToScene(newFlame.gameObject, SceneManager.GetSceneByBuildIndex(1));
 
         // ANIMATION
         wick.followedPlayer.faceAnimator.SetTrigger("Chocked");

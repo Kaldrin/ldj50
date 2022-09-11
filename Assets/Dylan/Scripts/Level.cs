@@ -1,25 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-//using System.Diagnostics;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-
-
-/// <summary>
-/// Manages a level, in the level parent object
-/// </summary>
 public class Level : MonoBehaviour
 {
     public GameObject cinemachineBrain;
-    [SerializeField] Level nextLevel;
     [SerializeField] int nextLevelIndex;
     public UnityEvent actionsAtStart;
-    [SerializeField] float actionsAtStartDelay = 0f;
     [SerializeField] bool firstLevel;
     [SerializeField] GameObject startPoint;
-
+    [SerializeField] bool dontResetFlame = false;
 
     private void Start()
     {
@@ -28,9 +20,13 @@ public class Level : MonoBehaviour
             SetAllObjects();
             GameManager.instance.currentLevel = gameObject;
         }
-        else StartLevel();
+        //else StartLevel();
     }
-    private void OnEnable() => cinemachineBrain.SetActive(true);
+<<<<<<< Updated upstream
+
+    void SetAllObjects() => actionsAtStart?.Invoke();
+=======
+    //private void OnEnable() => cinemachineBrain.SetActive(true);
 
     /// <summary>
     /// Trigger the specified events that should trigger at the beginning of the level
@@ -42,7 +38,7 @@ public class Level : MonoBehaviour
     /// Changes to the next level and takes into account the player triggering the change to TP only the other one to the next level
     /// </summary>
     /// <param name="characterWhoTriggeredTheChange"></param>
-    public void ChangeLevel(Character characterWhoTriggeredTheChange, Level followingLevel)
+    /*public void ChangeLevel(Character characterWhoTriggeredTheChange, Level followingLevel)
     {
         MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex);
         
@@ -77,46 +73,49 @@ public class Level : MonoBehaviour
         KillFlames();
         ResetPlayerWicks();
         SetPlayerWicksToMove();
+    }*/
+
+    public void SetCurrentLevel()
+    {
+        GameManager.instance.currentLevel = gameObject;
     }
+>>>>>>> Stashed changes
 
     void EndCurrentLevel() => cinemachineBrain.SetActive(false);
-    /// <summary>
-    /// Disables the current level after a duration to allow for the next one
-    /// </summary>
     void RemovePreviousLevel() => gameObject.SetActive(false);
 
     public void StartLevel()
     {
+        if(dontResetFlame) return;
+        Debug.Log("Start Level");
+        KillFlames();
         actionsAtStart?.Invoke();
-        SetAllObjects();
         //gameObject.SetActive(true);
+<<<<<<< Updated upstream
         GameManager.instance.currentLevel = gameObject;
+
+        // Reset Flame State
+=======
+        ResetPlayerWicks();
+        SetPlayerWicksToMove();
+>>>>>>> Stashed changes
     }
 
     public void RestartLevel()
     {
-        // We can't use singletons if we want to have multiple players
-        //Character.instance.transform.position = startPoint.transform.position;
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        foreach (Character character in FindObjectsOfType<Character>())
-            character.transform.position = startPoint.transform.position;
+        Character.instance.transform.position = startPoint.transform.position;
         StartCoroutine(WaitBeforeRestart());
     }
 
     IEnumerator WaitBeforeRestart()
     {
-        // If we have multiple bombs in 2 players mode we can't use an instance for the wick
-        //Meche.instance.Reset();
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // RESET WICKS
-        ResetPlayerWicks();
+        Meche.instance.Reset();
 
 
-        // KILL FLAMES
-        KillFlames();
-    
+        // Kill flames
+        foreach (Flame flame in FindObjectsOfType<Flame>())
+            flame.Die();
 
-        // RESET OTHER LEVEL ELEMENTS
         RestartLevelElements();
 
 
@@ -124,42 +123,14 @@ public class Level : MonoBehaviour
 
 
 
-        // If we are to have more than one player we cannot use instance, gotta replace that
-        //Character.instance.GetControlsBack();
-        //Meche.instance.SetFollowPlayer(true);
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // START AGAIN PLAYERS & WICKS  
-        foreach (Character character in FindObjectsOfType<Character>())
-            character.GetControlsBack();
-        SetPlayerWicksToMove();
+        Character.instance.GetControlsBack();
+        Meche.instance.SetFollowPlayer(true);
+        /*
+        if (!firstLevel)
+            Instantiate(GameManager.instance.flame);
+            */
     }
 
-    /// <summary>
-    /// Resets all players' wicks
-    /// </summary>
-    public void ResetPlayerWicks()
-    {
-        foreach (Meche wick in FindObjectsOfType<Meche>())
-            if (wick.followedPlayer && wick.followPoint)
-                wick.PlayerWickReset();
-    }
-    void ResetNonPlayerWicks()
-    {
-        foreach (Meche wick in FindObjectsOfType<Meche>())
-            if (!wick.followedPlayer && !wick.followPoint)
-                wick.Reset();
-    }
-    public void SetPlayerWicksToMove()
-    {
-        foreach (Meche wick in FindObjectsOfType<Meche>())
-            if (wick.followedPlayer && wick.followPoint)
-                wick.SetFollowPlayer(true);
-    }
-    void KillFlames()
-    {
-        foreach (Flame flame in FindObjectsOfType<Flame>())
-            flame.Die();
-    }
 
     void RestartLevelElements()
     {
@@ -184,8 +155,5 @@ public class Level : MonoBehaviour
         foreach (HiddenCollisionTrigger collisionTrigger in FindObjectsOfType<HiddenCollisionTrigger>())
             if (collisionTrigger)
                 collisionTrigger.Reset();
-        foreach (GeneralTrigger generalTrigger in FindObjectsOfType<GeneralTrigger>())
-            generalTrigger.Reset();
-        ResetNonPlayerWicks();
     }
 }

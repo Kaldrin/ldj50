@@ -622,7 +622,7 @@ PrefabInstance:
     - target: {fileID: 4924571648016329949, guid: 9750c165e84246e4e957c9270829978f, type: 3}
       propertyPath: firePrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6223970586065089628, guid: cefef1df2a75bfc4baeff2f3fb8f5a90, type: 3}
     - target: {fileID: 4924571648016329949, guid: 9750c165e84246e4e957c9270829978f, type: 3}
       propertyPath: ropeToLight
       value: 
@@ -630,6 +630,10 @@ PrefabInstance:
     - target: {fileID: 4924571648016329949, guid: 9750c165e84246e4e957c9270829978f, type: 3}
       propertyPath: ambianceAudioFade
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4924571648016329949, guid: 9750c165e84246e4e957c9270829978f, type: 3}
+      propertyPath: shouldSetAllWicksToBurning
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4924571649773969879, guid: 9750c165e84246e4e957c9270829978f, type: 3}
       propertyPath: m_LocalPosition.x

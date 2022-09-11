@@ -5,43 +5,19 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 
-
-/// <summary>
-/// Main playable character of the game. Can be player or AI controlled. Only needs movement inputs.
-/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class Character : MonoBehaviour
 {
-    // We can't use singletons if we want a multiplayer
-    // SINGLETON
-    //public static Character instance;
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
     [SerializeField] private Rigidbody2D rigid2D = null;
     [FormerlySerializedAs("characterAnimator")] [SerializeField] public Animator faceAnimator = null;
-
-
-
-    [Header("WICK")]
-    [SerializeField] GameObject wickPrefab = null;
-    [SerializeField] Transform wickFollowPoint = null;
-    Meche attachedWick = null;
-
-
-    // INPUTS
-    Vector2 receivedMovementVector = new Vector2(0f, 0f);
-    bool pauseInput = false;
-
-
-
-    [Header("MOVEMENTS")]
+    [HideInInspector] public Vector2 receivedMovementVector = new Vector2(0f, 0f);
     private Vector2 actualMovementVector = new Vector2(0f, 0f);
-    [HideInInspector] public float baseSpeed = 300f;
     public float speed = 3f;
-    public bool canReceiveInputs = true;
+    
+    public static Character instance;
 
-
+    public bool canSendInputs = true;
+    
 
 
     [Header("FX")]
@@ -52,68 +28,34 @@ public class Character : MonoBehaviour
 
     [Header("AUDIO")]
     [SerializeField] private AudioSource explosionSFX = null;
-
-
-
-
-
-
-
-
-
-
-
-    private void Start()
-    {
-        baseSpeed = speed;
-        SpawnOwnWick();
-    }
-    private void FixedUpdate() => ManagementMovements();
-    private void Update()
-    {
-        // PRESS PAUSE
-        if (pauseInput)
-            PressPause();
-    }
-
-
-
-
-
-
-    // INPUTS
-    public void ReceiveMovementInputs(float x, float y)
-    {
-        if (canReceiveInputs)
-            receivedMovementVector = new Vector2(x, y);
-        else
-            receivedMovementVector = new Vector2(0, 0);
-    }
-    public void ReceivePauseInput(bool pause) => pauseInput = pause;
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public void StopMoving()
     {
+        canSendInputs = false;
         rigid2D.velocity = Vector2.zero;
-        canReceiveInputs = false;
     }
-    public void GetControlsBack() => canReceiveInputs = true;
-
+    public void GetControlsBack() => canSendInputs = true;
+    private void FixedUpdate() => ManagementMovements();
 
 
 
 
 
     #region MOVEMENTS
-    void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed * Time.deltaTime * LocalScaleAverage();
-    // Used to base the character's speed on its scale, scale which should be 1 by default.
-    float LocalScaleAverage()
-    {
-        Vector3 scale = transform.localScale;
-        return (scale.x + scale.y + scale.z) / 3;
-    }
+    void CalculateMovement() => actualMovementVector = Vector3.Normalize(receivedMovementVector) * speed * Time.deltaTime;
     void ManagementMovements()
     {
-        if (canReceiveInputs)
+        if (canSendInputs)
         {
             CalculateMovement();
             if (rigid2D)
@@ -122,47 +64,67 @@ public class Character : MonoBehaviour
     }
     #endregion
 
-
-
-
-
-    #region PAUSE
-    public void PressPause()
+    #region Pause
+    public void PressEscape()
     {
-        if (PauseMenu.instance)
-            PauseMenu.instance.PressEscape();
+        PauseMenu.instance.PressEscape();
     }
     #endregion
 
 
 
+    // EDITOR
+    // Automatically assign some references
+    void GetMissingComponents()
+    {
+        if (!rigid2D && GetComponent<Rigidbody2D>())
+            rigid2D = GetComponent<Rigidbody2D>();
+    }
+    private void OnValidate() => GetMissingComponents();
 
+    private void Awake() => instance = this;
 
     #region DIE
-    public void Die() => StartCoroutine(Explode());
+    public void Die()
+    {
+        // Play animation / Make Sound etc
+        StartCoroutine(Explode());
+    }
+
     IEnumerator Explode()
     {
         StopMoving();
-
-        // KILL FLAMES
-        foreach (Flame flame in FindObjectsOfType<Flame>())
-            flame.Die();
-
+        
+        
         // FX
         if (explosionFX)
             explosionFX.Play();
         if (graphicsParent)
             graphicsParent.SetActive(false);
-
-
+        
+        
         // AUDIO
         if (explosionSFX)
             explosionSFX.Play();
+<<<<<<< Updated upstream
+        
+        
+        //transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        //transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        //transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        //transform.GetChild(0)?.GetComponent<AudioSource>()?.Play();
+        GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(10f, 0.3f);
+        Meche.instance.Reset();
+        
+        
+        
+=======
 
 
         // CAMERA SHAKE
         // That's a complicated and not foolproof way at all to shake the camera
-        GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(10f, 0.3f);
+        CameraShake.instance.ShakeCamera(10f, 0.3f);
 
 
         // We can't use a single wick instance for 2 players mode, working on a more foolproof and adaptable system
@@ -176,56 +138,18 @@ public class Character : MonoBehaviour
 
 
 
+>>>>>>> Stashed changes
         yield return new WaitForSeconds(1f);
-
-
-
+        
+        
         // RESET
         graphicsParent?.SetActive(true);
         GameManager.instance.currentLevel.GetComponent<Level>().RestartLevel();
-
-
+        
+        
         //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
         //transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
         //transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
     }
     #endregion
-
-
-
-
-
-
-    // WICK
-    /// <summary>
-    /// Spawns the wick of the player and sets it up for it.
-    /// </summary>
-    void SpawnOwnWick()
-    {
-        if (!attachedWick)
-        {
-            Meche newWick = Instantiate(wickPrefab).GetComponent<Meche>();
-            newWick.followPoint = wickFollowPoint;
-            newWick.SetFollowPlayer(true);
-            newWick.followedPlayer = this;
-            attachedWick = newWick;
-        }
-    }
-
-
-
-
-
-    // EDITOR
-    /// <summary>
-    /// Automatically assign some references
-    /// </summary>
-    void GetMissingComponents()
-    {
-        if (!rigid2D && GetComponent<Rigidbody2D>())
-            rigid2D = GetComponent<Rigidbody2D>();
-    }
-    private void OnValidate() => GetMissingComponents();
-
-    //private void Awake() => instance = this;
 }

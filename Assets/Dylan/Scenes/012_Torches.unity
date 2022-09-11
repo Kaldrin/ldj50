@@ -564,12 +564,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
       propertyPath: firstLevel
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 415211275}
+    - target: {fileID: 8916772263962318405, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
+      propertyPath: nextLevelIndex
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 434a1cb335f8e484d9003ca4154cc000, type: 3}
 --- !u!1 &415211275 stripped

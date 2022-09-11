@@ -41,6 +41,8 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         int actualSceneIndex = SceneManager.GetActiveScene().buildIndex;
         async = SceneManager.LoadSceneAsync(nextSceneIndex, LoadSceneMode.Additive);
         yield return async;
+        GameObject.FindObjectOfType<Level>().SetCurrentLevel();
+        GameObject.FindObjectOfType<Level>().StartLevel();
         yield return new WaitForSecondsRealtime(1);
         async = SceneManager.UnloadSceneAsync(actualSceneIndex);
         yield return async;
@@ -70,17 +72,20 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         async = SceneManager.LoadSceneAsync(nextSceneIndex, LoadSceneMode.Additive);
         yield return async;
         yield return null;
+        GameObject.FindObjectOfType<Level>().SetCurrentLevel();
         TeleportPlayerToLastLevel();
+        GameObject.FindObjectOfType<Level>().StartLevel();
+        Meche[] meches = GameObject.FindObjectsOfType<Meche>();
+        foreach(Meche meche in meches) meche.burning = true;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(nextSceneIndex));
         //yield return new WaitForSecondsRealtime(1);
         async = SceneManager.UnloadSceneAsync(actualSceneIndex);
         yield return async;
-        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(nextSceneIndex));
     }
 
     void TeleportPlayerToLastLevel()
     {
         Vector2 nextLevelStartpoint = GameManager.instance.currentLevel.transform.GetChild(4).GetChild(0).position;
-        Debug.Log(nextLevelStartpoint);
         Character[] players = GameObject.FindObjectsOfType<Character>();
         foreach(Character player in players)
         {
