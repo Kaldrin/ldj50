@@ -2,11 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+<<<<<<< Updated upstream
+=======
+using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
+>>>>>>> Stashed changes
 
 [RequireComponent(typeof(LineRenderer))]
 public class Meche : MonoBehaviour
 {
+<<<<<<< Updated upstream
     [SerializeField] Transform characterToFollow = null;
+=======
+    //public static Meche instance;
+
+    [FormerlySerializedAs("characterToFollow")][SerializeField] public Transform followPoint = null;
+    [SerializeField] public Character followedPlayer = null;
+
+>>>>>>> Stashed changes
     [SerializeField] public LineRenderer lineRenderer = null;
     [SerializeField] private bool startFollowingCharacterOnStart = false;
     private float distanceToCreateNewPoint = 0.5f;
@@ -61,8 +74,14 @@ public class Meche : MonoBehaviour
     {
         if (state)
         {
+<<<<<<< Updated upstream
             if (characterToFollow && lineRenderer)
+=======
+            Debug.Log("Check Follow Conditions");
+            if (followPoint && lineRenderer)
+>>>>>>> Stashed changes
             {
+                Debug.Log("Set Follow Character True");
                 followingCharacter = true;
 
                 // Set positions of line renderer
@@ -86,6 +105,7 @@ public class Meche : MonoBehaviour
         {
             followingCharacter = true;
             GameObject pref = Instantiate(GameManager.instance.flame);
+            SceneManager.MoveGameObjectToScene(pref.gameObject, SceneManager.GetSceneByBuildIndex(1));
             pref.transform.position = lineRenderer.GetPosition(0);
             pref.GetComponent<Flame>().lineRendererToFollow = GetComponent<LineRenderer>();
             pref.GetComponent<Flame>().RestartMovingFromBeginning(0);

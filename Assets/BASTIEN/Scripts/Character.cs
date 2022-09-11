@@ -106,6 +106,7 @@ public class Character : MonoBehaviour
         // AUDIO
         if (explosionSFX)
             explosionSFX.Play();
+<<<<<<< Updated upstream
         
         
         //transform.GetChild(0).GetComponent<ParticleSystem>().Play();
@@ -118,6 +119,26 @@ public class Character : MonoBehaviour
         
         
         
+=======
+
+
+        // CAMERA SHAKE
+        // That's a complicated and not foolproof way at all to shake the camera
+        CameraShake.instance.ShakeCamera(10f, 0.3f);
+
+
+        // We can't use a single wick instance for 2 players mode, working on a more foolproof and adaptable system
+        // Meche.instance.Reset();
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /*
+        // RESET WICKS
+        foreach (Meche wick in FindObjectsOfType<Meche>())
+            wick.Reset();
+        */
+
+
+
+>>>>>>> Stashed changes
         yield return new WaitForSeconds(1f);
         
         
