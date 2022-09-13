@@ -86,11 +86,7 @@ public class PauseMenu : MonoBehaviour
         for (int i = 0; i < flames.Length; i++)
         {
             flames[i].moving = true;
-<<<<<<< Updated upstream
         }
-=======
-        
->>>>>>> Stashed changes
         Torch[] torches = GameObject.FindObjectsOfType<Torch>();
         for (int i = 0; i < torches.Length; i++)
         {
