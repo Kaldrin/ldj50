@@ -25,7 +25,6 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Start() {
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
-        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
     }
 
@@ -43,6 +42,8 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void LoadGame()
     {
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+
         this.gameData = dataHandler.Load();
 
         if(this.gameData == null) NewGame();

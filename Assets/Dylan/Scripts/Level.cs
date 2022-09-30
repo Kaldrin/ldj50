@@ -19,16 +19,15 @@ public class Level : MonoBehaviour
     [SerializeField] float actionsAtStartDelay = 0f;
     [SerializeField] bool firstLevel;
     [SerializeField] GameObject startPoint;
-    [SerializeField] bool multiSceneDebug = false;
 
 
-    private void Start()
+    private void Awake()
     {
-        if (firstLevel)
-        {
-            SetAllObjects();
-            GameManager.instance.currentLevel = gameObject;
-        }
+        //if (firstLevel)
+        //{
+        SetAllObjects();
+        GameManager.instance.currentLevel = gameObject;
+        //}
     }
     private void OnEnable() => cinemachineBrain.SetActive(true);
 
@@ -37,6 +36,7 @@ public class Level : MonoBehaviour
     /// </summary>
     void SetAllObjects() => Invoke("ActionsAtStart", actionsAtStartDelay);
     void ActionsAtStart() => actionsAtStart.Invoke();
+
 
     /// <summary>
     /// Changes to the next level and takes into account the player triggering the change to TP only the other one to the next level
@@ -72,7 +72,7 @@ public class Level : MonoBehaviour
             newlyActivatedLevel = nextLevel;
         }
 
-        
+
 
         // Disable this level once the transition is done
         Invoke("RemovePreviousLevel", 1);
@@ -89,6 +89,11 @@ public class Level : MonoBehaviour
         SetPlayerWicksToMove();
     }
 
+    public void SetMainMenuTrigger()
+    {
+        if(transform.GetChild(4).childCount > 1) transform.GetChild(4).GetChild(1).gameObject.SetActive(true);
+    }
+
     void EndCurrentLevel() => cinemachineBrain.SetActive(false);
     /// <summary>
     /// Disables the current level after a duration to allow for the next one
@@ -98,8 +103,9 @@ public class Level : MonoBehaviour
     public void StartLevel()
     {
         SetAllObjects();
-        gameObject.SetActive(true);
-        GameManager.instance.currentLevel = gameObject;
+        KillFlames();
+        ResetPlayerWicks();
+        SetPlayerWicksToMove();
     }
 
     public void RestartLevel()
@@ -123,7 +129,7 @@ public class Level : MonoBehaviour
 
         // KILL FLAMES
         KillFlames();
-    
+
 
         // RESET OTHER LEVEL ELEMENTS
         RestartLevelElements();
@@ -137,9 +143,12 @@ public class Level : MonoBehaviour
         //Character.instance.GetControlsBack();
         //Meche.instance.SetFollowPlayer(true);
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // START AGAIN PLAYERS & WICKS  
-        foreach (Character character in FindObjectsOfType<Character>())
-            character.GetControlsBack();
+        // START AGAIN PLAYERS & WICKS
+        if (!PauseMenu.instance.transform.GetChild(0).gameObject.activeInHierarchy)
+        {
+            foreach (Character character in FindObjectsOfType<Character>())
+                character.GetControlsBack();
+        }
         SetPlayerWicksToMove();
     }
 

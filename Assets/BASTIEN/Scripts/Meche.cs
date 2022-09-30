@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 
 
@@ -15,12 +16,12 @@ public class Meche : MonoBehaviour
 {
     //public static Meche instance;
 
-    [FormerlySerializedAs("characterToFollow")] [SerializeField] public Transform followPoint = null;
+    [FormerlySerializedAs("characterToFollow")][SerializeField] public Transform followPoint = null;
     [SerializeField] public Character followedPlayer = null;
 
     [SerializeField] public LineRenderer lineRenderer = null;
     private float distanceToCreateNewPoint = 0.5f;
-    private bool followingCharacter = false;
+    [SerializeField] bool followingCharacter = false;
     [SerializeField] int amountOfPointsBeforeToSpawnFlame;
     int currentAmountOfPoints;
     bool flameExists;
@@ -126,6 +127,7 @@ public class Meche : MonoBehaviour
             pref.GetComponent<Flame>().transform.position = lineRenderer.GetPosition(0);
             pref.GetComponent<Flame>().lineRendererToFollow = GetComponent<LineRenderer>();
             pref.GetComponent<Flame>().RestartMovingFromBeginning(0);
+            SceneManager.MoveGameObjectToScene(pref.gameObject, SceneManager.GetSceneByBuildIndex(0));
             flameExists = true;
         }
     }
