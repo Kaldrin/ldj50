@@ -112,7 +112,7 @@ public class LighterTrigger : MonoBehaviour
         newFlame.lineRendererToFollow = lineToFollow;
         newFlame.transform.position = lightingArea.position;
         newFlame.RestartMovingFromBeginning(index);
-        SceneManager.MoveGameObjectToScene(newFlame.gameObject, SceneManager.GetSceneByBuildIndex(1));
+        SceneManager.MoveGameObjectToScene(newFlame.gameObject, SceneManager.GetSceneByBuildIndex(0));
 
         // ANIMATION
         wick.followedPlayer.faceAnimator.SetTrigger("Chocked");

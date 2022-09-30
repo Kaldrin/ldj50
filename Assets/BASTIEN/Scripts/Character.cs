@@ -106,20 +106,6 @@ public class Character : MonoBehaviour
         // AUDIO
         if (explosionSFX)
             explosionSFX.Play();
-<<<<<<< Updated upstream
-        
-        
-        //transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-        //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        //transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-        //transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
-        //transform.GetChild(0)?.GetComponent<AudioSource>()?.Play();
-        GameManager.instance.currentLevel.GetComponent<Level>().cinemachineBrain.transform.GetChild(0).GetComponent<CameraShake>().ShakeCamera(10f, 0.3f);
-        Meche.instance.Reset();
-        
-        
-        
-=======
 
 
         // CAMERA SHAKE
@@ -138,7 +124,6 @@ public class Character : MonoBehaviour
 
 
 
->>>>>>> Stashed changes
         yield return new WaitForSeconds(1f);
         
         

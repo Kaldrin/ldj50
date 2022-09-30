@@ -12,9 +12,19 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         instance = this;
+        SetUpCamera();
     }
 
-    public void ShakeCamera(float intensity, float time) 
+    void SetUpCamera()
+    {
+        if (GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineFramingTransposer>())
+        {
+            GetComponent<CinemachineVirtualCameraBase>().Follow = GameObject.FindGameObjectWithTag("Player").transform;
+            GetComponent<CinemachineVirtualCameraBase>().LookAt = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+    }
+
+    public void ShakeCamera(float intensity, float time)
     {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMulti = GameObject.FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         cinemachineBasicMulti.m_AmplitudeGain = intensity;

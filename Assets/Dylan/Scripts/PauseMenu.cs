@@ -6,12 +6,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : MonoBehaviour, IDataPersistence
 {
     public static PauseMenu instance;
     bool active = false;
     [SerializeField] AudioMixer audioMixer;
     [SerializeField] Slider mainSlider;
+    [SerializeField] float volumeLevel;
     GameObject lastselect;
 
     // Start is called before the first frame update
@@ -19,6 +20,17 @@ public class PauseMenu : MonoBehaviour
     {
         instance = this;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.volumeLevel = data.volumeLevel;
+        mainSlider.value = this.volumeLevel;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.volumeLevel = this.volumeLevel;
     }
 
     public void PressEscape()
@@ -86,11 +98,7 @@ public class PauseMenu : MonoBehaviour
         for (int i = 0; i < flames.Length; i++)
         {
             flames[i].moving = true;
-<<<<<<< Updated upstream
         }
-=======
-        
->>>>>>> Stashed changes
         Torch[] torches = GameObject.FindObjectsOfType<Torch>();
         for (int i = 0; i < torches.Length; i++)
         {
@@ -107,7 +115,6 @@ public class PauseMenu : MonoBehaviour
             animators[i].speed = 1;
         }*/
         active = false;
-        PlayerPrefs.Save();
     }
 
     public void OpenOptionsMenu()
@@ -125,7 +132,7 @@ public class PauseMenu : MonoBehaviour
     public void ValueChangeCheck()
     {
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(mainSlider.value) * 20);
-        PlayerPrefs.SetFloat("soundVolume", mainSlider.value);
+        volumeLevel = mainSlider.value;
     }
 
     public void OpenMainPauseMenu()
