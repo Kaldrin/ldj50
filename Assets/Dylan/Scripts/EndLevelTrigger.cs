@@ -12,5 +12,9 @@ public class EndLevelTrigger : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         MultiSceneLevelManager.instance.LoadNextLevelAdditive(nextLevelIndex, characterWhoTriggerd: other.GetComponent<Character>());
     }
-    private void OnDrawGizmos() => Gizmos.DrawCube(transform.position, transform.localScale);
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(transform.position, transform.localScale);
+    }
 }

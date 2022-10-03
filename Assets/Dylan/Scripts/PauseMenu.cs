@@ -13,6 +13,8 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
     [SerializeField] AudioMixer audioMixer;
     [SerializeField] Slider mainSlider;
     [SerializeField] float volumeLevel;
+    [SerializeField] Toggle fullscreenToggle;
+    [SerializeField] int fullscreen = 1;
     GameObject lastselect;
 
     // Start is called before the first frame update
@@ -26,11 +28,37 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
     {
         this.volumeLevel = data.volumeLevel;
         mainSlider.value = this.volumeLevel;
+        this.fullscreen = data.fullscreen;
+        if (data.fullscreen == 1)
+        {
+            Screen.fullScreen = true;
+            fullscreenToggle.isOn = true;
+        }
+        else
+        {
+            Screen.fullScreen = false;
+            fullscreenToggle.isOn = false;
+        }
+    }
+
+    public void ChangeFullScreenValue()
+    {
+        if (!fullscreenToggle.isOn)
+        {
+            fullscreen = 0;
+            Screen.fullScreen = false;
+        }
+        else if (fullscreenToggle.isOn)
+        {
+            fullscreen = 1;
+            Screen.fullScreen = true;
+        }
     }
 
     public void SaveData(ref GameData data)
     {
         data.volumeLevel = this.volumeLevel;
+        data.fullscreen = this.fullscreen;
     }
 
     public void PressEscape()
@@ -127,9 +155,10 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
     private void Start()
     {
         mainSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        fullscreenToggle.onValueChanged.AddListener(delegate { ChangeFullScreenValue(); });
     }
 
-    public void ValueChangeCheck()
+    void ValueChangeCheck()
     {
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(mainSlider.value) * 20);
         volumeLevel = mainSlider.value;
@@ -144,7 +173,7 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        MultiSceneLevelManager.instance.LoadMainMenu();
     }
 
     public void Quit()

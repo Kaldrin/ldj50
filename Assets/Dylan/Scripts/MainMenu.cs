@@ -22,11 +22,7 @@ public class MainMenu : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        if (data.lastLevel > 0 && !GameManager.instance.mainMenuLoaded)
-        {
-            SetUpMenuWhenPlayerHasAlreadyPlayed();
-            GameManager.instance.mainMenuLoaded = true;
-        }
+        if (data.lastLevel > 0) SetUpMenuWhenPlayerHasAlreadyPlayed();
     }
 
     public void SaveData(ref GameData data)
