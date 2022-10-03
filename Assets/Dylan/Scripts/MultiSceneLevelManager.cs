@@ -35,16 +35,15 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(2));
     }
 
-    public void LoadNextLevelAdditive(int nextLevelIndex, Action nextVoid = null, Character characterWhoTriggerd = null)
+    public void LoadNextLevelAdditive(int nextLevelIndex, Character characterWhoTriggerd = null)
     {
         playerWhoTriggeredEndLevel = characterWhoTriggerd;
-        StartCoroutine(LoadCoroutine(nextLevelIndex, nextVoid));
-        if (nextLevelIndex != 2) lastLevelIndex = nextLevelIndex;
+        StartCoroutine(LoadCoroutine(nextLevelIndex));
         if (lastLevelIndex > maxLevelIndex) maxLevelIndex = nextLevelIndex;
         DataPersistenceManager.instance.SaveGame();
     }
 
-    IEnumerator LoadCoroutine(int nextSceneIndex, Action nextVoid = null)
+    IEnumerator LoadCoroutine(int nextSceneIndex)
     {
         int actualSceneIndex = SceneManager.GetActiveScene().buildIndex;
         async = SceneManager.LoadSceneAsync(nextSceneIndex, LoadSceneMode.Additive);
@@ -57,7 +56,6 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         yield return async;
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(nextSceneIndex));
         GameManager.instance.currentLevel.GetComponent<Level>().SetMainMenuTrigger();
-        if (nextVoid != null) nextVoid.Invoke();
     }
 
     public void LoadData(GameData data)
@@ -79,7 +77,7 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         if (ambianceAudioFade)
             ambianceAudioFade.FadeOut();
         StartCoroutine(LoadLastLevelCoroutine(lastLevelIndex));
-        Invoke("TriggerMusic", 1.2f);
+        Invoke("TriggerMusic", .5f);
     }
 
     IEnumerator LoadLastLevelCoroutine(int nextSceneIndex)
@@ -94,8 +92,8 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(nextSceneIndex));
         //yield return new WaitForSecondsRealtime(1);
         async = SceneManager.UnloadSceneAsync(actualSceneIndex);
-        GameManager.instance.currentLevel.GetComponent<Level>().SetMainMenuTrigger();
         yield return async;
+        GameManager.instance.currentLevel.GetComponent<Level>().SetMainMenuTrigger();
     }
 
     void TeleportPlayerToLastLevel()
@@ -108,6 +106,22 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
         playerWhoTriggeredEndLevel = null;
     }
 
+    IEnumerator LoadMainMenuCoroutine()
+    {
+        int actualSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        async = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+        yield return async;
+        yield return null;
+        TeleportPlayerToMainMenu();
+        GameManager.instance.currentLevel.GetComponent<Level>().StartLevel();
+        foreach (Meche meche in GameObject.FindObjectsOfType<Meche>()) meche.burning = false;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(2));
+        //yield return new WaitForSecondsRealtime(1);
+        async = SceneManager.UnloadSceneAsync(actualSceneIndex);
+        yield return async;
+        GameManager.instance.currentLevel.GetComponent<Level>().SetMainMenuTrigger();
+    }
+
     void TriggerMusic()
     {
         if (music)
@@ -116,12 +130,16 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
 
     public void LoadMainMenu()
     {
-        LoadNextLevelAdditive(2);
+        StartCoroutine(LoadMainMenuCoroutine());
+        if (music)
+            music.audioSource.Stop();
+        if (ambianceAudioFade)
+            ambianceAudioFade.FadeIn();
     }
 
     void TeleportPlayerToMainMenu()
     {
-        Vector2 mainMenuTeleportPoint = GameObject.FindObjectOfType<Level>().transform.GetChild(4).GetChild(1).position;
+        Vector2 mainMenuTeleportPoint = GameManager.instance.currentLevel.transform.GetChild(4).GetChild(0).position;
         foreach (Character player in GameObject.FindObjectsOfType<Character>())
         {
             if (player != playerWhoTriggeredEndLevel) player.transform.position = mainMenuTeleportPoint;

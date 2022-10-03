@@ -8,11 +8,13 @@ public class GameData
     public int maxLevel;
     public int lastLevel;
     public float volumeLevel;
+    public int fullscreen;
 
     public GameData()
     {
         this.maxLevel = 0;
         this.lastLevel = 0;
         this.volumeLevel = .5f;
+        this.fullscreen = 1;
     }
 }
