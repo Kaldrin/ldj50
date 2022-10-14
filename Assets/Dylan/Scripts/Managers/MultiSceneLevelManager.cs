@@ -39,6 +39,7 @@ public class MultiSceneLevelManager : MonoBehaviour, IDataPersistence
     {
         playerWhoTriggeredEndLevel = characterWhoTriggerd;
         StartCoroutine(LoadCoroutine(nextLevelIndex));
+        lastLevelIndex = nextLevelIndex;
         if (lastLevelIndex > maxLevelIndex) maxLevelIndex = nextLevelIndex;
         DataPersistenceManager.instance.SaveGame();
     }

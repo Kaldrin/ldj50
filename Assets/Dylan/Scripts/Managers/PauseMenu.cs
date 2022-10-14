@@ -10,11 +10,21 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
 {
     public static PauseMenu instance;
     bool active = false;
-    [SerializeField] AudioMixer audioMixer;
-    [SerializeField] Slider mainSlider;
-    [SerializeField] float volumeLevel;
-    [SerializeField] Toggle fullscreenToggle;
-    [SerializeField] int fullscreen = 1;
+
+    [SerializeField]
+    AudioMixer audioMixer;
+
+    [SerializeField]
+    Slider mainSlider;
+
+    [SerializeField]
+    float volumeLevel;
+
+    [SerializeField]
+    Toggle fullscreenToggle;
+
+    [SerializeField]
+    int fullscreen = 1;
     GameObject lastselect;
 
     // Start is called before the first frame update
@@ -63,8 +73,10 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
 
     public void PressEscape()
     {
-        if (active) Unpause();
-        else Pause();
+        if (active)
+            Unpause();
+        else
+            Pause();
     }
 
     private void Update()
@@ -173,6 +185,7 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
 
     public void GoToMainMenu()
     {
+        Unpause();
         MultiSceneLevelManager.instance.LoadMainMenu();
     }
 
