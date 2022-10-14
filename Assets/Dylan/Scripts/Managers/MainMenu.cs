@@ -12,16 +12,16 @@ public class MainMenu : MonoBehaviour, IDataPersistence
     void Awake()
     {
         instance = this;
-        DataPersistenceManager.instance.LoadGame();
     }
 
     void Start()
     {
-
+        DataPersistenceManager.instance.LoadGame();
     }
 
     public void LoadData(GameData data)
     {
+        Debug.Log(data.lastLevel);
         if (data.lastLevel > 0) SetUpMenuWhenPlayerHasAlreadyPlayed();
     }
 
