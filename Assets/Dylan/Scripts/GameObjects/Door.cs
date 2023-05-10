@@ -22,7 +22,7 @@ public class Door : MonoBehaviour
 
 
 
-    void Awake()
+    void Start()
     {
         //hiddenSwitchList = listOfSwitches;
         initialPos = transform.position;
@@ -122,12 +122,10 @@ public class Door : MonoBehaviour
 
 
         // AUDIO
-        if (audioFade)
-            audioFade.FadeOut();
+        audioFade?.FadeOut();
 
         // FX
-        if (dustFX)
-            dustFX.Stop();
+        dustFX?.Stop();
     }
 
     IEnumerator Opening(bool fromStart = true)
@@ -163,13 +161,14 @@ public class Door : MonoBehaviour
         if (dustFX)
             dustFX.Play();
 
-
+        Debug.Log(goal);
         while (Vector2.Distance(transform.position, goal) > 0.05f)
         {
-            Vector2 pos = Vector2.MoveTowards(transform.position, goal + directionWhenOpening, openSpeed * Time.deltaTime);
+            Vector2 pos = Vector2.MoveTowards(transform.position, goal, openSpeed * Time.deltaTime);
             transform.position = pos;
             yield return null;
         }
+        Debug.Log("Movement finished");
         transform.position = goal;
 
 
@@ -195,6 +194,10 @@ public class Door : MonoBehaviour
                 transform.position = pos;
                 yield return new WaitForEndOfFrame();
             }
+
+
+            audioFade?.FadeOut();
+            dustFX?.Stop();
 
             open = null;
         }

@@ -28965,7 +28965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2350059043775003868, guid: 0c6e6a3fc575c8141b585476e9c33da0, type: 3}
       propertyPath: openSpeed
-      value: 0.4
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 2350059043775003868, guid: 0c6e6a3fc575c8141b585476e9c33da0, type: 3}
       propertyPath: directionWhenOpening.x

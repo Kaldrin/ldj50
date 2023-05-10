@@ -117,6 +117,16 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
         {
             characters[i].StopMoving();
         }
+        Arrow[] arrows = GameObject.FindObjectsOfType<Arrow>();
+        for(int i = 0; i < arrows.Length; i++)
+        {
+            arrows[i].Pause();
+        }
+        ArrowSpawner[] arrowSpawners = GameObject.FindObjectsOfType<ArrowSpawner>();
+        for(int i = 0; i < arrowSpawners.Length; i++)
+        {
+            arrowSpawners[i].Pause();
+        }
         /*Animator[] animators = GameObject.FindObjectsOfType<Animator>();
         for(int i = 0; i < animators.Length; i++)
         {
@@ -148,6 +158,16 @@ public class PauseMenu : MonoBehaviour, IDataPersistence
         for (int i = 0; i < doors.Length; i++)
         {
             doors[i].MoveBack();
+        }
+        Arrow[] arrows = GameObject.FindObjectsOfType<Arrow>();
+        for(int i = 0; i < arrows.Length; i++)
+        {
+            arrows[i].UnPause();
+        }
+        ArrowSpawner[] arrowSpawners = GameObject.FindObjectsOfType<ArrowSpawner>();
+        for(int i = 0; i < arrowSpawners.Length; i++)
+        {
+            arrowSpawners[i].Unpause();
         }
         /*Animator[] animators = GameObject.FindObjectsOfType<Animator>();
         for(int i = 0; i < animators.Length; i++)

@@ -8,32 +8,48 @@ public class ArrowSpawner : MonoBehaviour
     [SerializeField] float shotSpeed;
     [SerializeField] GameObject arrowPrefab;
     [SerializeField] bool repeat;
-    [SerializeField] float timeBeetweenTwoShots;
+    [SerializeField] float timeBetweenTwoShots;
     [SerializeField] bool triggeredAtStart;
     [SerializeField] float lifeTime;
     [SerializeField] float timeBeforeStart;
+    bool pause = false;
+
+    float currentTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (triggeredAtStart)
-            Invoke("Trigger", timeBeforeStart);
+        if (triggeredAtStart) Shot();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!pause)
+        {
+            if (repeat)
+            {
+                currentTime += Time.deltaTime;
+                if (currentTime >= timeBetweenTwoShots)
+                {
+                    Shot();
+                    currentTime = 0;
+                }
+            }
+        }
     }
 
-    public void Trigger()
+    public void Pause()
     {
-        isActive = true;
-        if (repeat) InvokeRepeating("Shot", 0, timeBeetweenTwoShots);
-        else Invoke("Shot", 0);
+        pause = true;
     }
 
-    void Shot()
+    public void Unpause()
+    {
+        pause = false;
+    }
+
+    public void Shot()
     {
         if (isActive)
         {

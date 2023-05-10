@@ -16,7 +16,14 @@ public class Oil : MonoBehaviour
     [SerializeField] private GameObject playerColliderDetector = null;
     [SerializeField] private Collider2D oildCollider = null;
     [SerializeField] private LayerMask propagationMask = new LayerMask();
+    bool initialState;
 
+
+
+    private void Start()
+    {
+        initialState = onFire;
+    }
 
     private void Update()
     {
@@ -37,19 +44,23 @@ public class Oil : MonoBehaviour
 
 
 
-    public void Reset() => SetOnFire(false);
+    public void Reset() => CheckInitialState();
+    
+    private void CheckInitialState()
+    {
+        if(initialState) SetOnFire(true, false);
+        else SetOnFire(false);
+    }
     
     
-    
-    
-    public void SetOnFire(bool state)
+    public void SetOnFire(bool state, bool deactivateOildCollider = true)
     {
         onFire = state;
         playerColliderDetector.SetActive(state);
         if (state)
         {
             propagationStartTime = Time.time;
-            oildCollider.enabled = false;
+            if(deactivateOildCollider) oildCollider.enabled = false;
             
             //FX
             if (fireFX)

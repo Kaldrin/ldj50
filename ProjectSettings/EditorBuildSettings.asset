@@ -33,6 +33,9 @@ EditorBuildSettings:
     path: Assets/Dylan/Scenes/025_Corridor.unity
     guid: 8299cc2b93a36064aa8d5658f5b97a6c
   - enabled: 1
+    path: Assets/Dylan/Scenes/FlamedCorridor.unity
+    guid: b1f7204e90d21f642aa83eafe54664cb
+  - enabled: 1
     path: Assets/Dylan/Scenes/030_Torches02.unity
     guid: 066306811b2039b4380a88ca42974216
   - enabled: 1
@@ -74,4 +77,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Dylan/Scenes/120_End.unity
     guid: ed05db70dda528b478dc7905043faac1
+  - enabled: 1
+    path: Assets/Dylan/Scenes/SceneTest3.unity
+    guid: d0cffcef8a359cd458e06b306f1c5458
   m_configObjects: {}
