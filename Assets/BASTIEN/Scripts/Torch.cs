@@ -58,6 +58,7 @@ public class Torch : MonoBehaviour
 
     public void SetOnFire(bool state)
     {
+        Debug.Log("Set On Fire");
         if (state)
         {
             action.Invoke();

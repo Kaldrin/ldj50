@@ -5066,11 +5066,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onFire: 0
+  canPropagate: 0
   propagationCooldown: 1
+  propagationRadius: 1.5
   oilPropagationCollider: {fileID: 342409399384813214}
   fireFX: {fileID: 342409399961817602}
   playerColliderDetector: {fileID: 342409398339483127}
-  oildCollider: {fileID: 342409399759160520}
+  oilCollider: {fileID: 342409399759160520}
   propagationMask:
     serializedVersion: 2
     m_Bits: 2048

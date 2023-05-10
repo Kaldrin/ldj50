@@ -17,11 +17,11 @@ public class MainMenu : MonoBehaviour, IDataPersistence
     void Start()
     {
         DataPersistenceManager.instance.LoadGame();
+        GetComponent<Level>().TimerBeforeSetMainMenuTrigger();
     }
 
     public void LoadData(GameData data)
     {
-        Debug.Log(data.lastLevel);
         if (data.lastLevel > 0) SetUpMenuWhenPlayerHasAlreadyPlayed();
     }
 

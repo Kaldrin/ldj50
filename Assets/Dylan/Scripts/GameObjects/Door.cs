@@ -22,10 +22,10 @@ public class Door : MonoBehaviour
 
 
 
-    void Awake()
+    void Start()
     {
         //hiddenSwitchList = listOfSwitches;
-        initialPos = transform.position;
+        initialPos = transform.localPosition;
         Reset();
     }
 
@@ -189,10 +189,10 @@ public class Door : MonoBehaviour
         if (open != null)
         {
             StopCoroutine(open);
-            while (Vector2.Distance(transform.position, initialPos) != 0)
+            while (Vector2.Distance(transform.localPosition, initialPos) != 0)
             {
-                Vector2 pos = Vector2.MoveTowards(transform.position, initialPos, openSpeed * Time.deltaTime * 10);
-                transform.position = pos;
+                Vector2 pos = Vector2.MoveTowards(transform.localPosition, initialPos, openSpeed * Time.deltaTime * 10);
+                transform.localPosition = pos;
                 yield return new WaitForEndOfFrame();
             }
 

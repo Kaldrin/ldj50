@@ -18,15 +18,17 @@ public class Level : MonoBehaviour
     public UnityEvent actionsAtStart;
     [SerializeField] float actionsAtStartDelay = 0f;
     [SerializeField] bool firstLevel;
-    [SerializeField] GameObject startPoint;
+    [SerializeField] bool corridor;
+    public GameObject startPoint;
 
 
     private void Awake()
     {
         //if (firstLevel)
         //{
-        SetAllObjects();
-        GameManager.instance.currentLevel = gameObject;
+        //SetAllObjects();
+        if (!corridor)
+            GameManager.instance.currentLevel = this;
         //}
     }
     private void OnEnable() => cinemachineBrain.SetActive(true);
@@ -89,9 +91,19 @@ public class Level : MonoBehaviour
         SetPlayerWicksToMove();
     }
 
-    public void SetMainMenuTrigger()
+    public void SetLevelTrigger()
     {
-        if(transform.GetChild(4).childCount > 1) transform.GetChild(4).GetChild(1).gameObject.SetActive(true);
+        if (transform.GetChild(4).childCount > 1) transform.GetChild(4).GetChild(1).gameObject.SetActive(true);
+    }
+
+    public void TimerBeforeSetMainMenuTrigger()
+    {
+        Invoke("MainMenuTrigger", 1);
+    }
+
+    void MainMenuTrigger()
+    {
+        transform.GetChild(4).GetChild(2).gameObject.SetActive(true);
     }
 
     void EndCurrentLevel() => cinemachineBrain.SetActive(false);

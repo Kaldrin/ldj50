@@ -2,35 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowSpawner : MonoBehaviour
+public class ArrowSpawner : MonoBehaviour, ILevelStart
 {
     public bool isActive = false;
     [SerializeField] float shotSpeed;
     [SerializeField] GameObject arrowPrefab;
     [SerializeField] bool repeat;
-    [SerializeField] float timeBeetweenTwoShots;
+    [SerializeField] float timeBetweenTwoShots;
     [SerializeField] bool triggeredAtStart;
     [SerializeField] float lifeTime;
     [SerializeField] float timeBeforeStart;
+    bool pause = false;
 
-    // Start is called before the first frame update
-    void Start()
+    float currentTime;
+
+    public void LevelStart()
     {
         if (triggeredAtStart)
-            Invoke("Trigger", timeBeforeStart);
+        {
+            isActive = true;
+            Invoke("Shot", timeBeforeStart);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!pause)
+        {
+            if (repeat)
+            {
+                currentTime += Time.deltaTime;
+                if (currentTime >= timeBetweenTwoShots)
+                {
+                    Shot();
+                }
+            }
+        }
     }
 
-    public void Trigger()
+    public void Pause()
     {
-        isActive = true;
-        if (repeat) InvokeRepeating("Shot", 0, timeBeetweenTwoShots);
-        else Invoke("Shot", 0);
+        pause = true;
+    }
+
+    public void Unpause()
+    {
+        pause = false;
     }
 
     void Shot()
@@ -39,6 +57,7 @@ public class ArrowSpawner : MonoBehaviour
         {
             GameObject newArrow = Instantiate(arrowPrefab, transform.position + transform.right, transform.rotation, transform);
             newArrow.GetComponent<Arrow>().Initialize(shotSpeed, lifeTime);
+            currentTime = 0;
         }
     }
 

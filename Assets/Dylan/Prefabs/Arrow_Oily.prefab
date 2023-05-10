@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_Size.x
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 342409399759160521, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 342409399759160522, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -183,6 +187,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 342409399759160523, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
+      propertyPath: oilCollider
+      value: 
+      objectReference: {fileID: 6216670698831750686}
+    - target: {fileID: 342409399759160523, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
       propertyPath: propagationRadius
       value: 1.2
       objectReference: {fileID: 0}
@@ -199,5 +207,10 @@ PrefabInstance:
 --- !u!4 &6216670698831750684 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 342409399759160522, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
+  m_PrefabInstance: {fileID: 5946570756435763926}
+  m_PrefabAsset: {fileID: 0}
+--- !u!70 &6216670698831750686 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 342409399759160520, guid: e6902fe8e3f04d44eab95db41a08997e, type: 3}
   m_PrefabInstance: {fileID: 5946570756435763926}
   m_PrefabAsset: {fileID: 0}

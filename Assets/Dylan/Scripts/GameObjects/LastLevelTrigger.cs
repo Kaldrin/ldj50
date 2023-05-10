@@ -7,5 +7,5 @@ public class LastLevelTrigger : MonoBehaviour
 {
     private void OnDrawGizmos() => Gizmos.DrawCube(transform.position, transform.localScale);
 
-    void OnTriggerEnter2D(Collider2D collider) => MultiSceneLevelManager.instance.LoadLastLevel();
+    void OnTriggerEnter2D(Collider2D collider) => MultiSceneLevelManager.instance.LoadLastLevel(collider.transform.parent.GetComponent<Character>(), transform.position);
 }

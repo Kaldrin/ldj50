@@ -129,7 +129,7 @@ public class Character : MonoBehaviour
         
         // RESET
         graphicsParent?.SetActive(true);
-        GameManager.instance.currentLevel.GetComponent<Level>().RestartLevel();
+        GameManager.instance.currentLevel.RestartLevel();
         
         
         //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;

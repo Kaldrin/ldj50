@@ -7,16 +7,23 @@ public class Oil : MonoBehaviour
 {
     public bool onFire = false;
     private float propagationStartTime = 0f;
-    private bool canPropagate = false;
+    public bool canPropagate = false;
     [SerializeField] private float propagationCooldown = 1f;
     [SerializeField] private float propagationRadius = 1.5f;
 
     [SerializeField] private GameObject oilPropagationCollider = null;
     [SerializeField] private ParticleSystem fireFX = null;
     [SerializeField] private GameObject playerColliderDetector = null;
-    [SerializeField] private Collider2D oildCollider = null;
+    [SerializeField] private Collider2D oilCollider = null;
     [SerializeField] private LayerMask propagationMask = new LayerMask();
+    bool initialState;
 
+
+
+    private void Start()
+    {
+        initialState = onFire;
+    }
 
     private void Update()
     {
@@ -37,19 +44,23 @@ public class Oil : MonoBehaviour
 
 
 
-    public void Reset() => SetOnFire(false);
+    public void Reset() => CheckInitialState();
+    
+    private void CheckInitialState()
+    {
+        if(initialState) SetOnFire(true, false);
+        else SetOnFire(false);
+    }
     
     
-    
-    
-    public void SetOnFire(bool state)
+    public void SetOnFire(bool state, bool deactivateOildCollider = true)
     {
         onFire = state;
         playerColliderDetector.SetActive(state);
         if (state)
         {
             propagationStartTime = Time.time;
-            oildCollider.enabled = false;
+            if(deactivateOildCollider) oilCollider.enabled = false;
             
             //FX
             if (fireFX)
@@ -57,7 +68,7 @@ public class Oil : MonoBehaviour
         }
         else
         {
-            oildCollider.enabled = true;
+            oilCollider.enabled = true;
             oilPropagationCollider.SetActive(false);
             
             // FX
@@ -73,7 +84,6 @@ public class Oil : MonoBehaviour
     #region FIRE PROPAGATION
     void TryToPropagate()
     {
-        canPropagate = false;
         propagationStartTime = Time.time;
         //oilPropagationCollider.SetActive(true);
 
@@ -86,6 +96,7 @@ public class Oil : MonoBehaviour
                 if (col.GetComponent<Torch>() && !col.GetComponent<Torch>().onFire)
                     col.GetComponent<Torch>().SetOnFire(true);
             }
+        if(cols.Length > 0) canPropagate = false;
     }
     #endregion
 }
